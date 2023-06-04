@@ -34,8 +34,10 @@ To build a release, please follow these steps:
 * macOS
 * Brew
 * XCode (min. 14.3)
+* XCode Command Line Tools
+* Ruby (with rbenv)
 
-## iOS Specificites
+## iOS Specifics
 ### Launcher Icons
 > Icons with alpha channel are not allowed in the Apple App Store.
 
@@ -61,4 +63,81 @@ flutter_launcher_icons:
 dart run flutter_launcher_icons
 ```
 
+## Developper Environment Setup
+### Env Vars
+**fastlane** requires some environment variables set up to run correctly. *In particular, having your locale not set to a UTF-8 locale will cause issues with building and uploading your build.* In your shell profile add the following lines:
+```sh
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+```
+You can find your shell profile at `~/.bashrc, ~/.bash_profile, ~/.profile or ~/.zshrc` depending on your system.
+
+With nano & ZSH
+```sh
+nano ~/.zshrc
+```
+### Installation of Xcode
+To proceed installation, search Xcode on AppStore and install it.
+### Installation of Xcode Command Line Tools
+To proceed installation, execute this command in your terminal:
+```sh
+xcode-select --install
+```
+### Install of Ruby Manager (rbenv)
+```sh
+brew install rbenv ruby-build
+```
+You now need to load rbenv in your shell
+```sh
+rbenv init
+```
+Confirm your installation by using rbenv-doctor
+```sh
+curl -fsSL https://github.com/rbenv/rbenv-installer/raw/HEAD/bin/rbenv-doctor | bash
+```
+To check fixed version of project
+```sh
+rbenv versions
+```
+## Installing of Ruby Gems
+We will now install ruby gems
+```sh
+gem install bundler
+```
+And install/update gems
+```sh
+bundle update
+```
+
+## Deployment using Fastlane
+Reference: https://docs.fastlane.tools/getting-started/ios/setup/
+Beta deployement: https://docs.fastlane.tools/getting-started/ios/beta-deployment/
+
+## CI/CD
+```sh
+bundle install
+bundle exec fastlane [lane]
+```
+
+## Contributor cheatsheet
+### Ruby
+Installation of latest stable release of ruby with rbenv
+```sh
+rbenv install $(rbenv install -l | grep -v - | tail -1)
+```
+
+Fix the version of project to a new version
+```sh
+rbenv local [version]
+```
+Content of `./Gemfile`
+```
+source "https://rubygems.org"
+
+gem "fastlane"
+```
+Update fastlane gem only
+```sh
+bundle update fastlane
+```
 ### Work in Progress...
