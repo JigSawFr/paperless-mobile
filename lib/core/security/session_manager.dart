@@ -13,7 +13,8 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 class SessionManager extends ValueNotifier<Dio> {
   Dio get client => value;
 
-  SessionManager([List<Interceptor> interceptors = const []]) : super(_initDio(interceptors));
+  SessionManager([List<Interceptor> interceptors = const []])
+      : super(_initDio(interceptors));
 
   static Dio _initDio(List<Interceptor> interceptors) {
     //en- and decoded by utf8 by default
@@ -21,8 +22,8 @@ class SessionManager extends ValueNotifier<Dio> {
       BaseOptions(contentType: Headers.jsonContentType),
     );
     dio.options
-      ..receiveTimeout = const Duration(seconds: 15)
-      ..sendTimeout = const Duration(seconds: 10)
+      ..receiveTimeout = const Duration(seconds: 20)
+      ..sendTimeout = const Duration(seconds: 60)
       ..responseType = ResponseType.json;
     (dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
         (client) => client..badCertificateCallback = (cert, host, port) => true;
@@ -62,7 +63,8 @@ class SessionManager extends ValueNotifier<Dio> {
         );
       final adapter = IOHttpClientAdapter()
         ..onHttpClientCreate = (client) => HttpClient(context: context)
-          ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+          ..badCertificateCallback =
+              (X509Certificate cert, String host, int port) => true;
 
       client.httpClientAdapter = adapter;
     }

@@ -18,8 +18,10 @@ class EditDocumentTypePage extends StatelessWidget {
       child: EditLabelPage<DocumentType>(
         label: documentType,
         fromJsonT: DocumentType.fromJson,
-        onSubmit: (context, label) => context.read<EditLabelCubit>().replaceDocumentType(label),
-        onDelete: (context, label) => context.read<EditLabelCubit>().removeDocumentType(label),
+        onSubmit: (context, label) =>
+            context.read<EditLabelCubit>().replaceDocumentType(label),
+        onDelete: (context, label) =>
+            context.read<EditLabelCubit>().removeDocumentType(label),
         canDelete: LocalUserAccount.current.paperlessUser.hasPermission(
           PermissionAction.delete,
           PermissionTarget.documentType,

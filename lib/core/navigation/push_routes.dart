@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -35,8 +36,9 @@ import 'package:provider/provider.dart';
 // Providers unfortunately have to be passed to the routes since they are children of the Navigator, not ancestors.
 
 Future<void> pushDocumentSearchPage(BuildContext context) {
-  final currentUser =
-      Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!.currentLoggedInUser;
+  final currentUser = Hive.box<GlobalSettings>(HiveBoxes.globalSettings)
+      .getValue()!
+      .currentLoggedInUser;
   final userRepo = context.read<UserRepository>();
   return Navigator.of(context).push(
     MaterialPageRoute(
@@ -53,7 +55,8 @@ Future<void> pushDocumentSearchPage(BuildContext context) {
             create: (context) => DocumentSearchCubit(
               context.read(),
               context.read(),
-              Hive.box<LocalUserAppState>(HiveBoxes.localUserAppState).get(currentUser)!,
+              Hive.box<LocalUserAppState>(HiveBoxes.localUserAppState)
+                  .get(currentUser)!,
             ),
             child: const DocumentSearchPage(),
           );
@@ -103,7 +106,8 @@ Future<void> pushSavedViewDetailsRoute(
       builder: (_) => MultiProvider(
         providers: [
           Provider.value(value: apiVersion),
-          if (apiVersion.hasMultiUserSupport) Provider.value(value: context.read<UserRepository>()),
+          if (apiVersion.hasMultiUserSupport)
+            Provider.value(value: context.read<UserRepository>()),
           Provider.value(value: context.read<LabelRepository>()),
           Provider.value(value: context.read<DocumentChangedNotifier>()),
           Provider.value(value: context.read<PaperlessDocumentsApi>()),
@@ -119,7 +123,8 @@ Future<void> pushSavedViewDetailsRoute(
               LocalUserAppState.current,
               savedView: savedView,
             ),
-            child: SavedViewDetailsPage(onDelete: context.read<SavedViewCubit>().remove),
+            child: SavedViewDetailsPage(
+                onDelete: context.read<SavedViewCubit>().remove),
           );
         },
       ),
@@ -127,7 +132,8 @@ Future<void> pushSavedViewDetailsRoute(
   );
 }
 
-Future<SavedView?> pushAddSavedViewRoute(BuildContext context, {required DocumentFilter filter}) {
+Future<SavedView?> pushAddSavedViewRoute(BuildContext context,
+    {required DocumentFilter filter}) {
   return Navigator.of(context).push<SavedView?>(
     MaterialPageRoute(
       builder: (_) => AddSavedViewPage(
@@ -141,7 +147,8 @@ Future<SavedView?> pushAddSavedViewRoute(BuildContext context, {required Documen
   );
 }
 
-Future<void> pushLinkedDocumentsView(BuildContext context, {required DocumentFilter filter}) {
+Future<void> pushLinkedDocumentsView(BuildContext context,
+    {required DocumentFilter filter}) {
   return Navigator.push(
     context,
     MaterialPageRoute(
@@ -196,7 +203,9 @@ Future<void> pushBulkEditCorrespondentRoute(
                 labelMapper: (document) => document.correspondent,
                 leadingIcon: const Icon(Icons.person_outline),
                 hintText: S.of(context)!.startTyping,
-                onSubmit: context.read<DocumentBulkActionCubit>().bulkModifyCorrespondent,
+                onSubmit: context
+                    .read<DocumentBulkActionCubit>()
+                    .bulkModifyCorrespondent,
                 assignMessageBuilder: (int count, String name) {
                   return S.of(context)!.bulkEditCorrespondentAssignMessage(
                         name,
@@ -204,7 +213,9 @@ Future<void> pushBulkEditCorrespondentRoute(
                       );
                 },
                 removeMessageBuilder: (int count) {
-                  return S.of(context)!.bulkEditCorrespondentRemoveMessage(count);
+                  return S
+                      .of(context)!
+                      .bulkEditCorrespondentRemoveMessage(count);
                 },
               );
             },
@@ -240,7 +251,9 @@ Future<void> pushBulkEditStoragePathRoute(
                 labelMapper: (document) => document.storagePath,
                 leadingIcon: const Icon(Icons.folder_outlined),
                 hintText: S.of(context)!.startTyping,
-                onSubmit: context.read<DocumentBulkActionCubit>().bulkModifyStoragePath,
+                onSubmit: context
+                    .read<DocumentBulkActionCubit>()
+                    .bulkModifyStoragePath,
                 assignMessageBuilder: (int count, String name) {
                   return S.of(context)!.bulkEditStoragePathAssignMessage(
                         count,
@@ -308,7 +321,9 @@ Future<void> pushBulkEditDocumentTypeRoute(BuildContext context,
                 labelMapper: (document) => document.documentType,
                 leadingIcon: const Icon(Icons.description_outlined),
                 hintText: S.of(context)!.startTyping,
-                onSubmit: context.read<DocumentBulkActionCubit>().bulkModifyDocumentType,
+                onSubmit: context
+                    .read<DocumentBulkActionCubit>()
+                    .bulkModifyDocumentType,
                 assignMessageBuilder: (int count, String name) {
                   return S.of(context)!.bulkEditDocumentTypeAssignMessage(
                         count,
@@ -316,7 +331,9 @@ Future<void> pushBulkEditDocumentTypeRoute(BuildContext context,
                       );
                 },
                 removeMessageBuilder: (int count) {
-                  return S.of(context)!.bulkEditDocumentTypeRemoveMessage(count);
+                  return S
+                      .of(context)!
+                      .bulkEditDocumentTypeRemoveMessage(count);
                 },
               );
             },
@@ -336,15 +353,18 @@ Future<DocumentUploadResult?> pushDocumentUploadPreparationPage(
 }) {
   final labelRepo = context.read<LabelRepository>();
   final docsApi = context.read<PaperlessDocumentsApi>();
+  final connectivity = context.read<Connectivity>();
   return Navigator.of(context).push<DocumentUploadResult>(
     MaterialPageRoute(
       builder: (_) => MultiProvider(
         providers: [
           Provider.value(value: labelRepo),
           Provider.value(value: docsApi),
+          Provider.value(value: connectivity),
         ],
         builder: (_, child) => BlocProvider(
           create: (_) => DocumentUploadCubit(
+            context.read(),
             context.read(),
             context.read(),
           ),

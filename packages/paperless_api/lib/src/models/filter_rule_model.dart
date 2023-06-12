@@ -250,7 +250,7 @@ class FilterRule with EquatableMixin {
       filterRules.add(docTypeRule);
     }
 
-    final sPathRule = filter.documentType.whenOrNull(
+    final sPathRule = filter.storagePath.whenOrNull(
       notAssigned: () => FilterRule(storagePathRule, null),
       fromId: (id) => FilterRule(storagePathRule, id.toString()),
     );
@@ -344,8 +344,7 @@ class FilterRule with EquatableMixin {
     }
 
     //Join values of all extended filter rules if exist
-    if (filterRules.isNotEmpty &&
-        filterRules.where((e) => e.ruleType == FilterRule.extendedRule).length > 1) {
+    if (filterRules.where((e) => e.ruleType == FilterRule.extendedRule).isNotEmpty) {
       final mergedExtendedRule = filterRules
           .where((r) => r.ruleType == FilterRule.extendedRule)
           .map((e) => e.value)

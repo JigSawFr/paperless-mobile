@@ -45,7 +45,8 @@ class _SelectFileTypeDialogState extends State<SelectFileTypeDialog> {
           CheckboxListTile(
             controlAffinity: ListTileControlAffinity.leading,
             value: _rememberSelection,
-            onChanged: (value) => setState(() => _rememberSelection = value ?? false),
+            onChanged: (value) =>
+                setState(() => _rememberSelection = value ?? false),
             title: Text(
               S.of(context)!.rememberDecision,
               style: Theme.of(context).textTheme.labelMedium,
@@ -61,7 +62,8 @@ class _SelectFileTypeDialogState extends State<SelectFileTypeDialog> {
             if (_rememberSelection) {
               widget.onRememberSelection(_downloadType);
             }
-            Navigator.of(context).pop(_downloadType == FileDownloadType.original);
+            Navigator.of(context)
+                .pop(_downloadType == FileDownloadType.original);
           },
         ),
       ],

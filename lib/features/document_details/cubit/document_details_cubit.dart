@@ -91,8 +91,8 @@ class DocumentDetailsCubit extends Cubit<DocumentDetailsState> {
       _notifier.notifyUpdated(updatedDocument);
     } else {
       final int autoAsn = await _api.findNextAsn();
-      final updatedDocument =
-          await _api.update(document.copyWith(archiveSerialNumber: () => autoAsn));
+      final updatedDocument = await _api
+          .update(document.copyWith(archiveSerialNumber: () => autoAsn));
       _notifier.notifyUpdated(updatedDocument);
     }
   }
@@ -104,7 +104,8 @@ class DocumentDetailsCubit extends Cubit<DocumentDetailsState> {
     if (state.metaData == null) {
       await loadMetaData();
     }
-    final desc = FileDescription.fromPath(state.metaData!.mediaFilename.replaceAll("/", " "));
+    final desc = FileDescription.fromPath(
+        state.metaData!.mediaFilename.replaceAll("/", " "));
 
     final fileName = "${desc.filename}.pdf";
     final file = File("${cacheDir.path}/$fileName");
@@ -138,7 +139,8 @@ class DocumentDetailsCubit extends Cubit<DocumentDetailsState> {
       await FileService.downloadsDirectory,
     );
     final desc = FileDescription.fromPath(
-      state.metaData!.mediaFilename.replaceAll("/", " "), // Flatten directory structure
+      state.metaData!.mediaFilename
+          .replaceAll("/", " "), // Flatten directory structure
     );
     if (!File(filePath).existsSync()) {
       File(filePath).createSync();
@@ -205,7 +207,8 @@ class DocumentDetailsCubit extends Cubit<DocumentDetailsState> {
     if (state.metaData == null) {
       await loadMetaData();
     }
-    final filePath = _buildDownloadFilePath(false, await FileService.temporaryDirectory);
+    final filePath =
+        _buildDownloadFilePath(false, await FileService.temporaryDirectory);
     await _api.downloadToFile(
       state.document,
       filePath,
@@ -223,7 +226,8 @@ class DocumentDetailsCubit extends Cubit<DocumentDetailsState> {
 
   String _buildDownloadFilePath(bool original, Directory dir) {
     final description = FileDescription.fromPath(
-      state.metaData!.mediaFilename.replaceAll("/", " "), // Flatten directory structure
+      state.metaData!.mediaFilename
+          .replaceAll("/", " "), // Flatten directory structure
     );
     final extension = original ? description.extension : 'pdf';
     return "${dir.path}/${description.filename}.$extension";

@@ -6,8 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hive/hive.dart';
 import 'package:paperless_api/paperless_api.dart';
 import 'package:paperless_mobile/core/bloc/connectivity_cubit.dart';
+import 'package:paperless_mobile/core/config/hive/hive_config.dart';
+import 'package:paperless_mobile/core/database/tables/global_settings.dart';
 import 'package:paperless_mobile/core/database/tables/local_user_account.dart';
 import 'package:paperless_mobile/core/global/constants.dart';
 import 'package:paperless_mobile/core/navigation/push_routes.dart';
@@ -42,12 +45,23 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   int _currentIndex = 0;
   late Timer _inboxTimer;
+  late final StreamSubscription _shareMediaSubscription;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _listenToInboxChanges();
+    final currentUser = Hive.box<GlobalSettings>(HiveBoxes.globalSettings)
+        .getValue()!
+        .currentLoggedInUser!;
+    // For sharing files coming from outside the app while the app is still opened
+    _shareMediaSubscription = ReceiveSharingIntent.getMediaStream().listen(
+        (files) =>
+            ShareIntentQueue.instance.addAll(files, userId: currentUser));
+    // For sharing files coming from outside the app while the app is closed
+    ReceiveSharingIntent.getInitialMedia().then((files) =>
+        ShareIntentQueue.instance.addAll(files, userId: currentUser));
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _listenForReceivedFiles();
     });
@@ -59,7 +73,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   void _listenToInboxChanges() {
-    _inboxTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+    _inboxTimer = Timer.periodic(const Duration(seconds: 60), (timer) {
       if (!mounted) {
         timer.cancel();
       } else {
@@ -93,17 +107,21 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _inboxTimer.cancel();
+    _shareMediaSubscription.cancel();
     super.dispose();
   }
 
   void _listenForReceivedFiles() async {
-    if (ShareIntentQueue.instance.hasUnhandledFiles) {
-      await _handleReceivedFile(ShareIntentQueue.instance.pop()!);
+    final currentUser = Hive.box<GlobalSettings>(HiveBoxes.globalSettings)
+        .getValue()!
+        .currentLoggedInUser!;
+    if (ShareIntentQueue.instance.userHasUnhandlesFiles(currentUser)) {
+      await _handleReceivedFile(ShareIntentQueue.instance.pop(currentUser)!);
     }
     ShareIntentQueue.instance.addListener(() async {
       final queue = ShareIntentQueue.instance;
-      while (queue.hasUnhandledFiles) {
-        final file = queue.pop()!;
+      while (queue.userHasUnhandlesFiles(currentUser)) {
+        final file = queue.pop(currentUser)!;
         await _handleReceivedFile(file);
       }
     });
@@ -115,7 +133,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
   }
 
-  Future<void> _handleReceivedFile(SharedMediaFile file) async {
+  Future<void> _handleReceivedFile(final SharedMediaFile file) async {
     SharedMediaFile mediaFile;
     if (Platform.isIOS) {
       // Workaround for file not found on iOS: https://stackoverflow.com/a/72813212
@@ -128,7 +146,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     } else {
       mediaFile = file;
     }
-
+    debugPrint("Consuming media file: ${mediaFile.path}");
     if (!_isFileTypeSupported(mediaFile)) {
       Fluttertoast.showToast(
         msg: translateError(context, ErrorCode.unsupportedFileFormat),
@@ -149,7 +167,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
     final fileDescription = FileDescription.fromPath(mediaFile.path);
     if (await File(mediaFile.path).exists()) {
-      final bytes = File(mediaFile.path).readAsBytesSync();
+      final bytes = await File(mediaFile.path).readAsBytes();
       final result = await pushDocumentUploadPreparationPage(
         context,
         bytes: bytes,

@@ -14,7 +14,8 @@ import 'package:paperless_mobile/features/settings/model/view_type.dart';
 part 'documents_cubit.g.dart';
 part 'documents_state.dart';
 
-class DocumentsCubit extends HydratedCubit<DocumentsState> with DocumentPagingBlocMixin {
+class DocumentsCubit extends HydratedCubit<DocumentsState>
+    with DocumentPagingBlocMixin {
   @override
   final PaperlessDocumentsApi api;
 
@@ -40,7 +41,9 @@ class DocumentsCubit extends HydratedCubit<DocumentsState> with DocumentPagingBl
         replace(document);
         emit(
           state.copyWith(
-            selection: state.selection.map((e) => e.id == document.id ? document : e).toList(),
+            selection: state.selection
+                .map((e) => e.id == document.id ? document : e)
+                .toList(),
           ),
         );
       },
@@ -48,7 +51,8 @@ class DocumentsCubit extends HydratedCubit<DocumentsState> with DocumentPagingBl
         remove(document);
         emit(
           state.copyWith(
-            selection: state.selection.where((e) => e.id != document.id).toList(),
+            selection:
+                state.selection.where((e) => e.id != document.id).toList(),
           ),
         );
       },
@@ -82,7 +86,9 @@ class DocumentsCubit extends HydratedCubit<DocumentsState> with DocumentPagingBl
     if (state.selectedIds.contains(model.id)) {
       emit(
         state.copyWith(
-          selection: state.selection.where((element) => element.id != model.id).toList(),
+          selection: state.selection
+              .where((element) => element.id != model.id)
+              .toList(),
         ),
       );
     } else {

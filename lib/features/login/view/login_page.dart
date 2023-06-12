@@ -54,7 +54,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final localAccounts = Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount);
+    final localAccounts =
+        Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: FormBuilder(
@@ -91,7 +92,9 @@ class _LoginPageState extends State<LoginPage> {
                       child: UserAccountListTile(
                         account: account,
                         onTap: () {
-                          context.read<AuthenticationCubit>().switchAccount(account.id);
+                          context
+                              .read<AuthenticationCubit>()
+                              .switchAccount(account.id);
                         },
                       ),
                     );
@@ -126,14 +129,16 @@ class _LoginPageState extends State<LoginPage> {
       final form = _formKey.currentState!.value;
       ClientCertificate? clientCert;
       final clientCertFormModel =
-          form[ClientCertificateFormField.fkClientCertificate] as ClientCertificateFormModel?;
+          form[ClientCertificateFormField.fkClientCertificate]
+              as ClientCertificateFormModel?;
       if (clientCertFormModel != null) {
         clientCert = ClientCertificate(
           bytes: clientCertFormModel.bytes,
           passphrase: clientCertFormModel.passphrase,
         );
       }
-      final credentials = form[UserCredentialsFormField.fkCredentials] as LoginFormCredentials;
+      final credentials =
+          form[UserCredentialsFormField.fkCredentials] as LoginFormCredentials;
       try {
         await widget.onSubmit(
           context,

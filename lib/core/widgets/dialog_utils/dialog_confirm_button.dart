@@ -9,12 +9,19 @@ enum DialogConfirmButtonStyle {
 class DialogConfirmButton<T> extends StatelessWidget {
   final DialogConfirmButtonStyle style;
   final String? label;
+
+  /// The value [Navigator.pop] will be called with. If [onPressed] is
+  /// specified, this value will be ignored.
   final T? returnValue;
+
+  /// Function called when the button is pressed. Takes precedence over [returnValue].
+  final void Function()? onPressed;
   const DialogConfirmButton({
     super.key,
     this.style = DialogConfirmButtonStyle.normal,
     this.label,
     this.returnValue,
+    this.onPressed,
   });
 
   @override
@@ -45,10 +52,13 @@ class DialogConfirmButton<T> extends StatelessWidget {
         _style = _dangerStyle;
         break;
     }
+
+    final effectiveOnPressed =
+        onPressed ?? () => Navigator.of(context).pop(returnValue ?? true);
     return ElevatedButton(
       child: Text(label ?? S.of(context)!.confirm),
       style: _style,
-      onPressed: () => Navigator.of(context).pop(returnValue ?? true),
+      onPressed: effectiveOnPressed,
     );
   }
 }

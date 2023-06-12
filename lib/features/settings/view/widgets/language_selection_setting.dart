@@ -7,7 +7,8 @@ class LanguageSelectionSetting extends StatefulWidget {
   const LanguageSelectionSetting({super.key});
 
   @override
-  State<LanguageSelectionSetting> createState() => _LanguageSelectionSettingState();
+  State<LanguageSelectionSetting> createState() =>
+      _LanguageSelectionSettingState();
 }
 
 class _LanguageSelectionSettingState extends State<LanguageSelectionSetting> {
@@ -27,7 +28,8 @@ class _LanguageSelectionSettingState extends State<LanguageSelectionSetting> {
       builder: (context, settings) {
         return ListTile(
           title: Text(S.of(context)!.language),
-          subtitle: Text(_languageOptions[settings.preferredLocaleSubtag]!.name),
+          subtitle:
+              Text(_languageOptions[settings.preferredLocaleSubtag]!.name),
           onTap: () => showDialog<String>(
             context: context,
             builder: (_) => RadioSettingsDialog<String>(
@@ -39,7 +41,8 @@ class _LanguageSelectionSettingState extends State<LanguageSelectionSetting> {
                 for (var language in _languageOptions.entries)
                   RadioOption(
                     value: language.key,
-                    label: language.value.name + (language.value.isComplete ? '' : '*'),
+                    label: language.value.name +
+                        (language.value.isComplete ? '' : '*'),
                   ),
               ],
               initialValue: settings.preferredLocaleSubtag,

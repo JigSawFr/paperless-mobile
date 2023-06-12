@@ -9,7 +9,8 @@ import 'package:hive_flutter/adapters.dart';
 /// Opens an encrypted box, calls [callback] with the now opened box, awaits
 /// [callback] to return and returns the calculated value. Closes the box after.
 ///
-Future<R?> withEncryptedBox<T, R>(String name, FutureOr<R?> Function(Box<T> box) callback) async {
+Future<R?> withEncryptedBox<T, R>(
+    String name, FutureOr<R?> Function(Box<T> box) callback) async {
   final key = await _getEncryptedBoxKey();
   final box = await Hive.openBox<T>(
     name,

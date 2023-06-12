@@ -43,14 +43,16 @@ class _DocumentShareButtonState extends State<DocumentShareButton> {
               child: CircularProgressIndicator(),
             )
           : const Icon(Icons.share),
-      onPressed:
-          widget.document != null && widget.enabled ? () => _onShare(widget.document!) : null,
+      onPressed: widget.document != null && widget.enabled
+          ? () => _onShare(widget.document!)
+          : null,
     ).paddedOnly(right: 4);
   }
 
   Future<void> _onShare(DocumentModel document) async {
     try {
-      final globalSettings = Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!;
+      final globalSettings =
+          Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!;
       bool original;
 
       switch (globalSettings.defaultShareType) {

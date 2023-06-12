@@ -27,8 +27,8 @@ class OldAuthenticationState with EquatableMixin {
   }) {
     return OldAuthenticationState(
       isAuthenticated: isAuthenticated ?? this.isAuthenticated,
-      showBiometricAuthenticationScreen:
-          showBiometricAuthenticationScreen ?? this.showBiometricAuthenticationScreen,
+      showBiometricAuthenticationScreen: showBiometricAuthenticationScreen ??
+          this.showBiometricAuthenticationScreen,
       username: username ?? this.username,
       fullName: fullName ?? this.fullName,
       localUserId: localUserId ?? this.localUserId,

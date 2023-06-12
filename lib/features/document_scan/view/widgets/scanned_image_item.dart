@@ -61,7 +61,7 @@ class _ScannedImageItemState extends State<ScannedImageItem> {
                         width: double.infinity,
                         height: 100,
                         child: FittedBox(
-                          fit: BoxFit.fill,
+                          fit: BoxFit.cover,
                           clipBehavior: Clip.antiAliasWithSaveLayer,
                           alignment: Alignment.center,
                           child: Image.file(

@@ -65,7 +65,10 @@ class _DocumentSearchBarState extends State<DocumentSearchBar> {
                           Flexible(
                             child: Text(
                               S.of(context)!.searchDocuments,
-                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
                                     fontWeight: FontWeight.w500,
                                     color: Theme.of(context).hintColor,
                                   ),
@@ -112,7 +115,9 @@ class _DocumentSearchBarState extends State<DocumentSearchBar> {
       icon: GlobalSettingsBuilder(
         builder: (context, settings) {
           return ValueListenableBuilder(
-            valueListenable: Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount).listenable(),
+            valueListenable:
+                Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount)
+                    .listenable(),
             builder: (context, box, _) {
               final account = box.get(settings.currentLoggedInUser!)!;
               return UserAvatar(account: account);

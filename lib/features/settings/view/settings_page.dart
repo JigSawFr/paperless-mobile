@@ -26,7 +26,9 @@ class SettingsPage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             subtitle: FutureBuilder<PaperlessServerInformationModel>(
-              future: context.read<PaperlessServerStatsApi>().getServerInformation(),
+              future: context
+                  .read<PaperlessServerStatsApi>()
+                  .getServerInformation(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Text(

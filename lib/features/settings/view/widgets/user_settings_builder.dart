@@ -18,10 +18,12 @@ class UserAccountBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Box<LocalUserAccount>>(
-      valueListenable: Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount).listenable(),
+      valueListenable:
+          Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount).listenable(),
       builder: (context, accountBox, _) {
-        final currentUser =
-            Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!.currentLoggedInUser;
+        final currentUser = Hive.box<GlobalSettings>(HiveBoxes.globalSettings)
+            .getValue()!
+            .currentLoggedInUser;
         if (currentUser != null) {
           final account = accountBox.get(currentUser);
           return builder(context, account);

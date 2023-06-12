@@ -32,7 +32,8 @@ class ColorSchemeOptionSetting extends StatelessWidget {
               options: [
                 RadioOption(
                   value: ColorSchemeOption.classic,
-                  label: translateColorSchemeOption(context, ColorSchemeOption.classic),
+                  label: translateColorSchemeOption(
+                      context, ColorSchemeOption.classic),
                 ),
                 RadioOption(
                   value: ColorSchemeOption.dynamic,

@@ -44,14 +44,16 @@ class _DocumentDownloadButtonState extends State<DocumentDownloadButton> {
               width: 16,
             )
           : const Icon(Icons.download),
-      onPressed:
-          widget.document != null && widget.enabled ? () => _onDownload(widget.document!) : null,
+      onPressed: widget.document != null && widget.enabled
+          ? () => _onDownload(widget.document!)
+          : null,
     ).paddedOnly(right: 4);
   }
 
   Future<void> _onDownload(DocumentModel document) async {
     try {
-      final globalSettings = Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!;
+      final globalSettings =
+          Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!;
       bool original;
 
       switch (globalSettings.defaultDownloadType) {

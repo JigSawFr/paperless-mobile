@@ -25,7 +25,8 @@ class UserAccountListTile extends StatelessWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (account.paperlessUser.fullName != null) Text(account.paperlessUser.fullName!),
+            if (account.paperlessUser.fullName != null)
+              Text(account.paperlessUser.fullName!),
             Text(
               account.serverUrl.replaceFirst(RegExp(r'https://?'), ''),
               style: TextStyle(color: theme.colorScheme.primary),

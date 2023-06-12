@@ -50,7 +50,9 @@ class SortDocumentsButton extends StatelessWidget {
                           initialSortField: state.filter.sortField,
                           initialSortOrder: state.filter.sortOrder,
                           onSubmit: (field, order) {
-                            return context.read<DocumentsCubit>().updateCurrentFilter(
+                            return context
+                                .read<DocumentsCubit>()
+                                .updateCurrentFilter(
                                   (filter) => filter.copyWith(
                                     sortField: field,
                                     sortOrder: order,

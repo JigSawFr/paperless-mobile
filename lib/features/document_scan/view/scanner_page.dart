@@ -7,15 +7,19 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:paperless_api/paperless_api.dart';
+import 'package:paperless_mobile/constants.dart';
 import 'package:paperless_mobile/core/bloc/connectivity_cubit.dart';
-import 'package:paperless_mobile/core/delegate/customizable_sliver_persistent_header_delegate.dart';
+import 'package:paperless_mobile/core/config/hive/hive_config.dart';
+import 'package:paperless_mobile/core/database/tables/global_settings.dart';
 import 'package:paperless_mobile/core/global/constants.dart';
 import 'package:paperless_mobile/core/navigation/push_routes.dart';
 import 'package:paperless_mobile/core/service/file_description.dart';
 import 'package:paperless_mobile/core/service/file_service.dart';
 import 'package:paperless_mobile/features/app_drawer/view/app_drawer.dart';
 import 'package:paperless_mobile/features/document_scan/cubit/document_scanner_cubit.dart';
+import 'package:paperless_mobile/features/document_scan/view/widgets/export_scans_dialog.dart';
 import 'package:paperless_mobile/features/document_scan/view/widgets/scanned_image_item.dart';
 import 'package:paperless_mobile/features/document_search/view/sliver_search_bar.dart';
 import 'package:paperless_mobile/features/documents/view/pages/document_view.dart';
@@ -27,6 +31,7 @@ import 'package:path/path.dart' as p;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class ScannerPage extends StatefulWidget {
   const ScannerPage({Key? key}) : super(key: key);
@@ -35,9 +40,14 @@ class ScannerPage extends StatefulWidget {
   State<ScannerPage> createState() => _ScannerPageState();
 }
 
-class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStateMixin {
-  final SliverOverlapAbsorberHandle searchBarHandle = SliverOverlapAbsorberHandle();
-  final SliverOverlapAbsorberHandle actionsHandle = SliverOverlapAbsorberHandle();
+class _ScannerPageState extends State<ScannerPage>
+    with SingleTickerProviderStateMixin {
+  final SliverOverlapAbsorberHandle searchBarHandle =
+      SliverOverlapAbsorberHandle();
+  final SliverOverlapAbsorberHandle actionsHandle =
+      SliverOverlapAbsorberHandle();
+
+  final _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -67,13 +77,8 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
                       ),
                       SliverOverlapAbsorber(
                         handle: actionsHandle,
-                        sliver: SliverPersistentHeader(
-                          pinned: true,
-                          delegate: CustomizableSliverPersistentHeaderDelegate(
-                            child: _buildActions(connectedState.isConnected),
-                            maxExtent: kTextTabBarHeight,
-                            minExtent: kTextTabBarHeight,
-                          ),
+                        sliver: SliverPinnedHeader(
+                          child: _buildActions(connectedState.isConnected),
                         ),
                       ),
                     ],
@@ -108,55 +113,115 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
       color: Theme.of(context).colorScheme.background,
       child: SizedBox(
         height: kTextTabBarHeight,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            BlocBuilder<DocumentScannerCubit, List<File>>(
-              builder: (context, state) {
-                return TextButton.icon(
-                  label: Text(S.of(context)!.previewScan),
-                  onPressed: state.isNotEmpty
-                      ? () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => DocumentView(
-
-                                documentBytes: _assembleFileBytes(
-                                  state,
-                                  forcePdf: true,
-                                ).then((file) => file.bytes),
+        child: BlocBuilder<DocumentScannerCubit, List<File>>(
+          builder: (context, state) {
+            return RawScrollbar(
+              padding: EdgeInsets.fromLTRB(16, 0, 16, 4),
+              interactive: false,
+              thumbVisibility: true,
+              thickness: 2,
+              radius: Radius.circular(2),
+              controller: _scrollController,
+              child: ListView(
+                controller: _scrollController,
+                scrollDirection: Axis.horizontal,
+                children: [
+                  SizedBox(width: 12),
+                  TextButton.icon(
+                    label: Text(S.of(context)!.previewScan),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.fromLTRB(5, 10, 5, 10),
+                    ),
+                    onPressed: state.isNotEmpty
+                        ? () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => DocumentView(
+                                  documentBytes: _assembleFileBytes(
+                                    state,
+                                    forcePdf: true,
+                                  ).then((file) => file.bytes),
+                                ),
                               ),
-                            ),
-                          )
-                      : null,
-                  icon: const Icon(Icons.visibility_outlined),
-                );
-              },
-            ),
-            BlocBuilder<DocumentScannerCubit, List<File>>(
-              builder: (context, state) {
-                return TextButton.icon(
-                  label: Text(S.of(context)!.clearAll),
-                  onPressed: state.isEmpty ? null : () => _reset(context),
-                  icon: const Icon(Icons.delete_sweep_outlined),
-                );
-              },
-            ),
-            BlocBuilder<DocumentScannerCubit, List<File>>(
-              builder: (context, state) {
-                return TextButton.icon(
-                  label: Text(S.of(context)!.upload),
-                  onPressed: state.isEmpty || !isConnected
-                      ? null
-                      : () => _onPrepareDocumentUpload(context),
-                  icon: const Icon(Icons.upload_outlined),
-                );
-              },
-            ),
-          ],
+                            )
+                        : null,
+                    icon: const Icon(Icons.visibility_outlined),
+                  ),
+                  SizedBox(width: 8),
+                  TextButton.icon(
+                    label: Text(S.of(context)!.clearAll),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.fromLTRB(5, 10, 5, 10),
+                    ),
+                    onPressed: state.isEmpty ? null : () => _reset(context),
+                    icon: const Icon(Icons.delete_sweep_outlined),
+                  ),
+                  SizedBox(width: 8),
+                  TextButton.icon(
+                    label: Text(S.of(context)!.upload),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.fromLTRB(5, 10, 5, 10),
+                    ),
+                    onPressed: state.isEmpty || !isConnected
+                        ? null
+                        : () => _onPrepareDocumentUpload(context),
+                    icon: const Icon(Icons.upload_outlined),
+                  ),
+                  SizedBox(width: 8),
+                  TextButton.icon(
+                    label: Text(S.of(context)!.export),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.fromLTRB(5, 10, 5, 10),
+                    ),
+                    onPressed: state.isEmpty ? null : _onSaveToFile,
+                    icon: const Icon(Icons.save_alt_outlined),
+                  ),
+                  SizedBox(width: 12),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
+  }
+
+  void _onSaveToFile() async {
+    final fileName = await showDialog<String>(
+      context: context,
+      builder: (context) => const ExportScansDialog(),
+    );
+    if (fileName != null) {
+      final cubit = context.read<DocumentScannerCubit>();
+      final file = await _assembleFileBytes(
+        forcePdf: true,
+        context.read<DocumentScannerCubit>().state,
+      );
+      try {
+        final globalSettings =
+            Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!;
+        if (Platform.isAndroid && androidInfo!.version.sdkInt <= 29) {
+          final isGranted = await askForPermission(Permission.storage);
+          if (!isGranted) {
+            showSnackBar(
+              context,
+              "Please grant Paperless Mobile permissions to access your filesystem.",
+              action: SnackBarActionConfig(
+                label: "OK",
+                onPressed: openAppSettings,
+              ),
+            );
+            return;
+          }
+        }
+        await cubit.saveToFile(
+          file.bytes,
+          "$fileName.pdf",
+          globalSettings.preferredLocaleSubtag,
+        );
+      } catch (error) {
+        showGenericError(context, error);
+      }
+    }
   }
 
   void _openDocumentScanner(BuildContext context) async {
@@ -175,7 +240,8 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
     final success = await EdgeDetection.detectEdge(file.path);
     if (!success) {
       if (kDebugMode) {
-        dev.log('[ScannerPage] Scan either not successful or canceled by user.');
+        dev.log(
+            '[ScannerPage] Scan either not successful or canceled by user.');
       }
       return;
     }
@@ -197,7 +263,9 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
     if ((uploadResult?.success ?? false) && uploadResult?.taskId != null) {
       // For paperless version older than 1.11.3, task id will always be null!
       context.read<DocumentScannerCubit>().reset();
-      context.read<TaskStatusCubit>().listenToTaskChanges(uploadResult!.taskId!);
+      context
+          .read<TaskStatusCubit>()
+          .listenToTaskChanges(uploadResult!.taskId!);
     }
   }
 
@@ -231,34 +299,37 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
   }
 
   Widget _buildImageGrid(List<File> scans) {
-    return CustomScrollView(
-      slivers: [
-        SliverOverlapInjector(handle: searchBarHandle),
-        SliverOverlapInjector(handle: actionsHandle),
-        SliverGrid.builder(
-          itemCount: scans.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            childAspectRatio: 1 / sqrt(2),
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: CustomScrollView(
+        slivers: [
+          SliverOverlapInjector(handle: searchBarHandle),
+          SliverOverlapInjector(handle: actionsHandle),
+          SliverGrid.builder(
+            itemCount: scans.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 1 / sqrt(2),
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemBuilder: (context, index) {
+              return ScannedImageItem(
+                file: scans[index],
+                onDelete: () async {
+                  try {
+                    context.read<DocumentScannerCubit>().removeScan(index);
+                  } on PaperlessServerException catch (error, stackTrace) {
+                    showErrorMessage(context, error, stackTrace);
+                  }
+                },
+                index: index,
+                totalNumberOfFiles: scans.length,
+              );
+            },
           ),
-          itemBuilder: (context, index) {
-            return ScannedImageItem(
-              file: scans[index],
-              onDelete: () async {
-                try {
-                  context.read<DocumentScannerCubit>().removeScan(index);
-                } on PaperlessServerException catch (error, stackTrace) {
-                  showErrorMessage(context, error, stackTrace);
-                }
-              },
-              index: index,
-              totalNumberOfFiles: scans.length,
-            );
-          },
-        ),
-      ],
+        ],
+      ),
     );
   }
 

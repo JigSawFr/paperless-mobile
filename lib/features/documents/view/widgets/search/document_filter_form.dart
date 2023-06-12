@@ -22,14 +22,17 @@ class DocumentFilterForm extends StatefulWidget {
     formKey.currentState?.save();
     final v = formKey.currentState!.value;
     return DocumentFilter(
-      correspondent: v[DocumentFilterForm.fkCorrespondent] as IdQueryParameter? ??
-          DocumentFilter.initial.correspondent,
+      correspondent:
+          v[DocumentFilterForm.fkCorrespondent] as IdQueryParameter? ??
+              DocumentFilter.initial.correspondent,
       documentType: v[DocumentFilterForm.fkDocumentType] as IdQueryParameter? ??
           DocumentFilter.initial.documentType,
       storagePath: v[DocumentFilterForm.fkStoragePath] as IdQueryParameter? ??
           DocumentFilter.initial.storagePath,
-      tags: v[DocumentModel.tagsKey] as TagsQuery? ?? DocumentFilter.initial.tags,
-      query: v[DocumentFilterForm.fkQuery] as TextQuery? ?? DocumentFilter.initial.query,
+      tags:
+          v[DocumentModel.tagsKey] as TagsQuery? ?? DocumentFilter.initial.tags,
+      query: v[DocumentFilterForm.fkQuery] as TextQuery? ??
+          DocumentFilter.initial.query,
       created: (v[DocumentFilterForm.fkCreatedAt] as DateRangeQuery),
       added: (v[DocumentFilterForm.fkAddedAt] as DateRangeQuery),
       asnQuery: initialFilter.asnQuery,
@@ -134,12 +137,15 @@ class _DocumentFilterFormState extends State<DocumentFilterForm> {
   }
 
   void _checkQueryConstraints() {
-    final filter = DocumentFilterForm.assembleFilter(widget.formKey, widget.initialFilter);
+    final filter =
+        DocumentFilterForm.assembleFilter(widget.formKey, widget.initialFilter);
     if (filter.forceExtendedQuery) {
       setState(() => _allowOnlyExtendedQuery = true);
-      final queryField = widget.formKey.currentState?.fields[DocumentFilterForm.fkQuery];
+      final queryField =
+          widget.formKey.currentState?.fields[DocumentFilterForm.fkQuery];
       queryField?.didChange(
-        (queryField.value as TextQuery?)?.copyWith(queryType: QueryType.extended),
+        (queryField.value as TextQuery?)
+            ?.copyWith(queryType: QueryType.extended),
       );
     } else {
       setState(() => _allowOnlyExtendedQuery = false);

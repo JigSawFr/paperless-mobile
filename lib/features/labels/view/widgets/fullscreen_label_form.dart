@@ -35,7 +35,8 @@ class FullscreenLabelForm<T extends Label> extends StatefulWidget {
           !(initialValue?.isOnlyAssigned() ?? false) || showAnyAssignedOption,
         ),
         assert(
-          !(initialValue?.isOnlyNotAssigned() ?? false) || showNotAssignedOption,
+          !(initialValue?.isOnlyNotAssigned() ?? false) ||
+              showNotAssignedOption,
         ),
         assert((addNewLabelText != null) == (onCreateNewLabel != null));
 
@@ -43,7 +44,8 @@ class FullscreenLabelForm<T extends Label> extends StatefulWidget {
   State<FullscreenLabelForm> createState() => _FullscreenLabelFormState();
 }
 
-class _FullscreenLabelFormState<T extends Label> extends State<FullscreenLabelForm<T>> {
+class _FullscreenLabelFormState<T extends Label>
+    extends State<FullscreenLabelForm<T>> {
   bool _showClearIcon = false;
   final _textEditingController = TextEditingController();
   final _focusNode = FocusNode();
@@ -133,9 +135,11 @@ class _FullscreenLabelFormState<T extends Label> extends State<FullscreenLabelFo
                   itemCount: options.length,
                   itemBuilder: (BuildContext context, int index) {
                     final option = options.elementAt(index);
-                    final highlight = AutocompleteHighlightedOption.of(context) == index;
+                    final highlight =
+                        AutocompleteHighlightedOption.of(context) == index;
                     if (highlight) {
-                      SchedulerBinding.instance.addPostFrameCallback((Duration timeStamp) {
+                      SchedulerBinding.instance
+                          .addPostFrameCallback((Duration timeStamp) {
                         Scrollable.ensureVisible(
                           context,
                           alignment: 0,
@@ -191,7 +195,8 @@ class _FullscreenLabelFormState<T extends Label> extends State<FullscreenLabelFo
         for (final option in widget.options.values) {
           // Don't include the initial value in the selection
           final initialValue = widget.initialValue;
-          if (initialValue is SetIdQueryParameter && option.id == initialValue.id) {
+          if (initialValue is SetIdQueryParameter &&
+              option.id == initialValue.id) {
             continue;
           }
           yield IdQueryParameter.fromId(option.id!);
@@ -199,8 +204,8 @@ class _FullscreenLabelFormState<T extends Label> extends State<FullscreenLabelFo
       }
     } else {
       // Show filtered options, if no matching option is found, always show not assigned and any assigned (if enabled) and proceed.
-      final matches =
-          widget.options.values.where((e) => e.name.trim().toLowerCase().contains(normalizedQuery));
+      final matches = widget.options.values
+          .where((e) => e.name.trim().toLowerCase().contains(normalizedQuery));
       if (matches.isNotEmpty) {
         for (final match in matches) {
           yield IdQueryParameter.fromId(match.id!);
@@ -270,7 +275,9 @@ class _FullscreenLabelFormState<T extends Label> extends State<FullscreenLabelFo
         selectedTileColor: Theme.of(context).focusColor,
         title: Text(widget.options[id]!.name),
         onTap: onTap,
-        enabled: widget.allowSelectUnassigned ? true : widget.options[id]!.documentCount != 0,
+        enabled: widget.allowSelectUnassigned
+            ? true
+            : widget.options[id]!.documentCount != 0,
       ),
     )!; // Never null, since we already return on unset before
   }

@@ -780,36 +780,49 @@
   "@alwaysAsk": {
     "description": "Option to choose when the app should always ask the user which filetype to use"
   },
-  "disableMatching": "Do not tag documents automatically",
+  "disableMatching": "Ne pas étiqueter les documents automatiquement",
   "@disableMatching": {
     "description": "One of the options for automatic tagging of documents"
   },
-  "none": "None",
+  "none": "Aucun",
   "@none": {
     "description": "One of available enum values of matching algorithm for tags"
   },
-  "logInToExistingAccount": "Log in to existing account",
+  "logInToExistingAccount": "Se connecter à un compte existant",
   "@logInToExistingAccount": {
     "description": "Title shown on login page if at least one user is already known to the app."
   },
-  "print": "Print",
+  "print": "Imprimer",
   "@print": {
     "description": "Tooltip for print button"
   },
-  "managePermissions": "Manage permissions",
+  "managePermissions": "Gérer les permissions",
   "@managePermissions": {
     "description": "Button which leads user to manage permissions page"
   },
-  "errorRetrievingServerVersion": "An error occurred trying to resolve the server version.",
+  "errorRetrievingServerVersion": "Une erreur est survenue en essayant de résoudre la version du serveur.",
   "@errorRetrievingServerVersion": {
     "description": "Message shown at the bottom of the settings page when the remote server version could not be resolved."
   },
-  "resolvingServerVersion": "Resolving server version...",
+  "resolvingServerVersion": "Résolution de la version du serveur...",
   "@resolvingServerVersion": {
     "description": "Message shown while the app is loading the remote server version."
   },
-  "goToLogin": "Go to login",
+  "goToLogin": "Se connecter",
   "@goToLogin": {
     "description": "Label of the button shown on the login page to skip logging in to existing accounts and navigate user to login page"
-  }
+  },
+  "export": "Export",
+  "@export": {
+    "description": "Label for button that exports scanned images to pdf (before upload)"
+  },
+  "invalidFilenameCharacter": "Invalid character(s) found in filename: {characters}",
+  "@invalidFilenameCharacter": {
+    "description": "For validating filename in export dialogue"
+  },
+  "exportScansToPdf": "Export scans to PDF",
+  "@exportScansToPdf": {
+    "description": "title of the alert dialog when exporting scans to pdf"
+  },
+  "allScansWillBeMerged": "All scans will be merged into a single PDF file."
 }

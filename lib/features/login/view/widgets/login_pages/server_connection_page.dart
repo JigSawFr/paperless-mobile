@@ -38,8 +38,9 @@ class _ServerConnectionPageState extends State<ServerConnectionPage> {
         toolbarHeight: kToolbarHeight - 4,
         title: Text(widget.titleString),
         bottom: PreferredSize(
-          child:
-              _isCheckingConnection ? const LinearProgressIndicator() : const SizedBox(height: 4.0),
+          child: _isCheckingConnection
+              ? const LinearProgressIndicator()
+              : const SizedBox(height: 4.0),
           preferredSize: const Size.fromHeight(4.0),
         ),
       ),
@@ -69,8 +70,9 @@ class _ServerConnectionPageState extends State<ServerConnectionPage> {
             ),
             FilledButton(
               child: Text(S.of(context)!.continueLabel),
-              onPressed:
-                  _reachabilityStatus == ReachabilityStatus.reachable ? widget.onContinue : null,
+              onPressed: _reachabilityStatus == ReachabilityStatus.reachable
+                  ? widget.onContinue
+                  : null,
             ),
           ],
         ),
@@ -85,12 +87,15 @@ class _ServerConnectionPageState extends State<ServerConnectionPage> {
     final certForm = widget.formBuilderKey.currentState
             ?.getRawValue(ClientCertificateFormField.fkClientCertificate)
         as ClientCertificateFormModel?;
-    final status = await context.read<ConnectivityStatusService>().isPaperlessServerReachable(
+    final status = await context
+        .read<ConnectivityStatusService>()
+        .isPaperlessServerReachable(
           address ??
               widget.formBuilderKey.currentState!
                   .getRawValue(ServerAddressFormField.fkServerAddress),
           certForm != null
-              ? ClientCertificate(bytes: certForm.bytes, passphrase: certForm.passphrase)
+              ? ClientCertificate(
+                  bytes: certForm.bytes, passphrase: certForm.passphrase)
               : null,
         );
     setState(() {

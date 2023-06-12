@@ -19,12 +19,14 @@ class PaperlessApiFactoryImpl implements PaperlessApiFactory {
   }
 
   @override
-  PaperlessSavedViewsApi createSavedViewsApi(Dio dio, {required int apiVersion}) {
+  PaperlessSavedViewsApi createSavedViewsApi(Dio dio,
+      {required int apiVersion}) {
     return PaperlessSavedViewsApiImpl(dio);
   }
 
   @override
-  PaperlessServerStatsApi createServerStatsApi(Dio dio, {required int apiVersion}) {
+  PaperlessServerStatsApi createServerStatsApi(Dio dio,
+      {required int apiVersion}) {
     return PaperlessServerStatsApiImpl(dio);
   }
 

@@ -49,7 +49,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     final apiVersion = await _getApiVersion(_sessionManager.client);
 
     // Mark logged in user as currently active user.
-    final globalSettings = Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!;
+    final globalSettings =
+        Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!;
     globalSettings.currentLoggedInUser = localUserId;
     await globalSettings.save();
 
@@ -64,11 +65,13 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   /// Switches to another account if it exists.
   Future<void> switchAccount(String localUserId) async {
     emit(const AuthenticationState.switchingAccounts());
-    final globalSettings = Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!;
+    final globalSettings =
+        Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!;
     if (globalSettings.currentLoggedInUser == localUserId) {
       return;
     }
-    final userAccountBox = Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount);
+    final userAccountBox =
+        Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount);
 
     if (!userAccountBox.containsKey(localUserId)) {
       debugPrint("User $localUserId not yet registered.");
@@ -78,15 +81,15 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     final account = userAccountBox.get(localUserId)!;
 
     if (account.settings.isBiometricAuthenticationEnabled) {
-      final authenticated =
-          await _localAuthService.authenticateLocalUser("Authenticate to switch your account.");
+      final authenticated = await _localAuthService
+          .authenticateLocalUser("Authenticate to switch your account.");
       if (!authenticated) {
         debugPrint("User not authenticated.");
         return;
       }
     }
-    await withEncryptedBox<UserCredentials, void>(HiveBoxes.localUserCredentials,
-        (credentialsBox) async {
+    await withEncryptedBox<UserCredentials, void>(
+        HiveBoxes.localUserCredentials, (credentialsBox) async {
       if (!credentialsBox.containsKey(localUserId)) {
         await credentialsBox.close();
         debugPrint("Invalid authentication for $localUserId");
@@ -108,7 +111,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
       await _updateRemoteUser(
         _sessionManager,
-        Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount).get(localUserId)!,
+        Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount)
+            .get(localUserId)!,
         apiVersion,
       );
 
@@ -140,12 +144,15 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }
 
   Future<void> removeAccount(String userId) async {
-    final userAccountBox = Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount);
-    final userAppStateBox = Hive.box<LocalUserAppState>(HiveBoxes.localUserAppState);
+    final userAccountBox =
+        Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount);
+    final userAppStateBox =
+        Hive.box<LocalUserAppState>(HiveBoxes.localUserAppState);
 
     await userAccountBox.delete(userId);
     await userAppStateBox.delete(userId);
-    await withEncryptedBox<UserCredentials, void>(HiveBoxes.localUserCredentials, (box) {
+    await withEncryptedBox<UserCredentials, void>(
+        HiveBoxes.localUserCredentials, (box) {
       box.delete(userId);
     });
   }
@@ -154,26 +161,29 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   /// Performs a conditional hydration based on the local authentication success.
   ///
   Future<void> restoreSessionState() async {
-    final globalSettings = Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!;
+    final globalSettings =
+        Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!;
     final localUserId = globalSettings.currentLoggedInUser;
     if (localUserId == null) {
       // If there is nothing to restore, we can quit here.
       return;
     }
-    final localUserAccountBox = Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount);
+    final localUserAccountBox =
+        Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount);
     final localUserAccount = localUserAccountBox.get(localUserId)!;
 
     if (localUserAccount.settings.isBiometricAuthenticationEnabled) {
-      final localAuthSuccess =
-          await _localAuthService.authenticateLocalUser("Authenticate to log back in"); //TODO: INTL
+      final localAuthSuccess = await _localAuthService
+          .authenticateLocalUser("Authenticate to log back in"); //TODO: INTL
       if (!localAuthSuccess) {
         emit(const AuthenticationState.requriresLocalAuthentication());
         return;
       }
     }
 
-    final authentication = await withEncryptedBox<UserCredentials, UserCredentials>(
-        HiveBoxes.localUserCredentials, (box) {
+    final authentication =
+        await withEncryptedBox<UserCredentials, UserCredentials>(
+            HiveBoxes.localUserCredentials, (box) {
       return box.get(globalSettings.currentLoggedInUser!);
     });
 
@@ -202,7 +212,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
   Future<void> logout() async {
     await _resetExternalState();
-    final globalSettings = Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!;
+    final globalSettings =
+        Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!;
     globalSettings.currentLoggedInUser = null;
     await globalSettings.save();
     emit(const AuthenticationState.unauthenticated());
@@ -240,8 +251,10 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       authToken: token,
     );
 
-    final userAccountBox = Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount);
-    final userStateBox = Hive.box<LocalUserAppState>(HiveBoxes.localUserAppState);
+    final userAccountBox =
+        Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount);
+    final userStateBox =
+        Hive.box<LocalUserAppState>(HiveBoxes.localUserAppState);
 
     if (userAccountBox.containsKey(localUserId)) {
       throw Exception("User already exists!");

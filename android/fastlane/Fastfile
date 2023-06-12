@@ -21,75 +21,27 @@ platform :android do |options|
     gradle(task: "test")
   end
 
-  desc "Submit a new internal build to Google Play"
-  lane :internal do |options|
+  desc "Submit build to Google Play"
+  lane :publish_in_play_store do |options|
+    release_status = (options[:is_draft] ? "draft" : "completed")
+    track = (options[:track])
     sh "flutter build appbundle -v"
     upload_to_play_store(
-      track: 'internal',
+      track: track,
+      release_status: release_status,
       aab: '../build/app/outputs/bundle/release/app-release.aab',
       json_key_data: ENV['PLAY_STORE_CREDENTIALS'],
-      release_status: options[:is_draft] ? "draft" : "completed",
     )
   end
-
   
-  desc "Promote internal track to alpha"
-  lane :promote_to_alpha do |options|
+  desc "Promote track"
+  lane :play_store_promote do |options|
+    track = options[:track]
+    promote_to = options[:promote_to_track]
     upload_to_play_store(
-      track: 'internal',
-      track_promote_to: 'alpha',
+      track: track,
+      track_promote_to: promote_to,
       json_key_data: ENV['PLAY_STORE_CREDENTIALS'],
-    )
-  end
-
-  desc "Submit a new alpha build to Google Play"
-  lane :alpha do |options|
-    sh "flutter build appbundle -v"
-    upload_to_play_store(
-      track: 'alpha',
-      aab: '../build/app/outputs/bundle/release/app-release.aab',
-      json_key_data: ENV['PLAY_STORE_CREDENTIALS'],
-      release_status: options[:is_draft] ? "draft" : "completed",
-    )
-  end
-
-  desc "Promote alpha track to beta"
-  lane :promote_to_beta do |options|
-    upload_to_play_store(
-      track: 'alpha',
-      track_promote_to: 'beta',
-      json_key_data: ENV['PLAY_STORE_CREDENTIALS'],
-    )
-  end
-
-  desc "Submit a new beta build to Google Play"
-  lane :beta do |options|
-    sh "flutter build appbundle -v"
-    upload_to_play_store(
-      track: 'beta',
-      aab: '../build/app/outputs/bundle/release/app-release.aab',
-      json_key_data: ENV['PLAY_STORE_CREDENTIALS'],
-      release_status: options[:is_draft] ? "draft" : "completed",
-    )
-  end
-
-  desc "Promote beta track to prod"
-  lane :promote_to_production do |options|
-    upload_to_play_store(
-      track: 'beta',
-      track_promote_to: 'production',
-      json_key_data: ENV['PLAY_STORE_CREDENTIALS'],
-    )
-  end
-
-  desc "Submit a new production build to Google Play"
-  lane :production do |options|
-    sh "flutter build appbundle -v"
-    upload_to_play_store(
-      track: 'production',
-      aab: '../build/app/outputs/bundle/release/app-release.aab',
-      json_key_data: ENV['PLAY_STORE_CREDENTIALS'],
-      release_status: options[:is_draft] ? "draft" : "completed",
     )
   end
 

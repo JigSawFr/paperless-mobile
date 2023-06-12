@@ -49,8 +49,8 @@ class _DocumentEditPageState extends State<DocumentEditPage> {
   @override
   void initState() {
     super.initState();
-    _filteredSuggestions =
-        widget.suggestions?.documentDifference(context.read<DocumentEditCubit>().state.document);
+    _filteredSuggestions = widget.suggestions
+        ?.documentDifference(context.read<DocumentEditCubit>().state.document);
   }
 
   @override
@@ -94,14 +94,16 @@ class _DocumentEditPageState extends State<DocumentEditPage> {
                       ListView(
                         children: [
                           _buildTitleFormField(state.document.title).padded(),
-                          _buildCreatedAtFormField(state.document.created).padded(),
+                          _buildCreatedAtFormField(state.document.created)
+                              .padded(),
                           // Correspondent form field
                           Column(
                             children: [
                               LabelFormField<Correspondent>(
                                 showAnyAssignedOption: false,
                                 showNotAssignedOption: false,
-                                addLabelPageBuilder: (initialValue) => RepositoryProvider.value(
+                                addLabelPageBuilder: (initialValue) =>
+                                    RepositoryProvider.value(
                                   value: context.read<LabelRepository>(),
                                   child: AddCorrespondentPage(
                                     initialName: initialValue,
@@ -109,26 +111,39 @@ class _DocumentEditPageState extends State<DocumentEditPage> {
                                 ),
                                 addLabelText: S.of(context)!.addCorrespondent,
                                 labelText: S.of(context)!.correspondent,
-                                options: context.watch<DocumentEditCubit>().state.correspondents,
-                                initialValue: state.document.correspondent != null
-                                    ? IdQueryParameter.fromId(state.document.correspondent!)
-                                    : const IdQueryParameter.unset(),
+                                options: context
+                                    .watch<DocumentEditCubit>()
+                                    .state
+                                    .correspondents,
+                                initialValue:
+                                    state.document.correspondent != null
+                                        ? IdQueryParameter.fromId(
+                                            state.document.correspondent!)
+                                        : const IdQueryParameter.unset(),
                                 name: fkCorrespondent,
                                 prefixIcon: const Icon(Icons.person_outlined),
                                 allowSelectUnassigned: true,
-                                canCreateNewLabel:
-                                    LocalUserAccount.current.paperlessUser.hasPermission(
+                                canCreateNewLabel: LocalUserAccount
+                                    .current.paperlessUser
+                                    .hasPermission(
                                   PermissionAction.add,
                                   PermissionTarget.correspondent,
                                 ),
                               ),
-                              if (_filteredSuggestions?.hasSuggestedCorrespondents ?? false)
+                              if (_filteredSuggestions
+                                      ?.hasSuggestedCorrespondents ??
+                                  false)
                                 _buildSuggestionsSkeleton<int>(
-                                  suggestions: _filteredSuggestions!.correspondents,
-                                  itemBuilder: (context, itemData) => ActionChip(
-                                    label: Text(state.correspondents[itemData]!.name),
+                                  suggestions:
+                                      _filteredSuggestions!.correspondents,
+                                  itemBuilder: (context, itemData) =>
+                                      ActionChip(
+                                    label: Text(
+                                        state.correspondents[itemData]!.name),
                                     onPressed: () {
-                                      _formKey.currentState?.fields[fkCorrespondent]?.didChange(
+                                      _formKey
+                                          .currentState?.fields[fkCorrespondent]
+                                          ?.didChange(
                                         IdQueryParameter.fromId(itemData),
                                       );
                                     },
@@ -142,34 +157,45 @@ class _DocumentEditPageState extends State<DocumentEditPage> {
                               LabelFormField<DocumentType>(
                                 showAnyAssignedOption: false,
                                 showNotAssignedOption: false,
-                                addLabelPageBuilder: (currentInput) => RepositoryProvider.value(
+                                addLabelPageBuilder: (currentInput) =>
+                                    RepositoryProvider.value(
                                   value: context.read<LabelRepository>(),
                                   child: AddDocumentTypePage(
                                     initialName: currentInput,
                                   ),
                                 ),
-                                canCreateNewLabel:
-                                    LocalUserAccount.current.paperlessUser.hasPermission(
+                                canCreateNewLabel: LocalUserAccount
+                                    .current.paperlessUser
+                                    .hasPermission(
                                   PermissionAction.add,
                                   PermissionTarget.documentType,
                                 ),
                                 addLabelText: S.of(context)!.addDocumentType,
                                 labelText: S.of(context)!.documentType,
-                                initialValue: state.document.documentType != null
-                                    ? IdQueryParameter.fromId(state.document.documentType!)
-                                    : const IdQueryParameter.unset(),
+                                initialValue:
+                                    state.document.documentType != null
+                                        ? IdQueryParameter.fromId(
+                                            state.document.documentType!)
+                                        : const IdQueryParameter.unset(),
                                 options: state.documentTypes,
                                 name: _DocumentEditPageState.fkDocumentType,
-                                prefixIcon: const Icon(Icons.description_outlined),
+                                prefixIcon:
+                                    const Icon(Icons.description_outlined),
                                 allowSelectUnassigned: true,
                               ),
-                              if (_filteredSuggestions?.hasSuggestedDocumentTypes ?? false)
+                              if (_filteredSuggestions
+                                      ?.hasSuggestedDocumentTypes ??
+                                  false)
                                 _buildSuggestionsSkeleton<int>(
-                                  suggestions: _filteredSuggestions!.documentTypes,
-                                  itemBuilder: (context, itemData) => ActionChip(
-                                    label: Text(state.documentTypes[itemData]!.name),
-                                    onPressed: () =>
-                                        _formKey.currentState?.fields[fkDocumentType]?.didChange(
+                                  suggestions:
+                                      _filteredSuggestions!.documentTypes,
+                                  itemBuilder: (context, itemData) =>
+                                      ActionChip(
+                                    label: Text(
+                                        state.documentTypes[itemData]!.name),
+                                    onPressed: () => _formKey
+                                        .currentState?.fields[fkDocumentType]
+                                        ?.didChange(
                                       IdQueryParameter.fromId(itemData),
                                     ),
                                   ),
@@ -182,12 +208,15 @@ class _DocumentEditPageState extends State<DocumentEditPage> {
                               LabelFormField<StoragePath>(
                                 showAnyAssignedOption: false,
                                 showNotAssignedOption: false,
-                                addLabelPageBuilder: (initialValue) => RepositoryProvider.value(
+                                addLabelPageBuilder: (initialValue) =>
+                                    RepositoryProvider.value(
                                   value: context.read<LabelRepository>(),
-                                  child: AddStoragePathPage(initalName: initialValue),
+                                  child: AddStoragePathPage(
+                                      initalName: initialValue),
                                 ),
-                                canCreateNewLabel:
-                                    LocalUserAccount.current.paperlessUser.hasPermission(
+                                canCreateNewLabel: LocalUserAccount
+                                    .current.paperlessUser
+                                    .hasPermission(
                                   PermissionAction.add,
                                   PermissionTarget.storagePath,
                                 ),
@@ -195,7 +224,8 @@ class _DocumentEditPageState extends State<DocumentEditPage> {
                                 labelText: S.of(context)!.storagePath,
                                 options: state.storagePaths,
                                 initialValue: state.document.storagePath != null
-                                    ? IdQueryParameter.fromId(state.document.storagePath!)
+                                    ? IdQueryParameter.fromId(
+                                        state.document.storagePath!)
                                     : const IdQueryParameter.unset(),
                                 name: fkStoragePath,
                                 prefixIcon: const Icon(Icons.folder_outlined),
@@ -220,7 +250,8 @@ class _DocumentEditPageState extends State<DocumentEditPage> {
                                   .isNotEmpty ??
                               false)
                             _buildSuggestionsSkeleton<int>(
-                              suggestions: (_filteredSuggestions?.tags.toSet() ?? {}),
+                              suggestions:
+                                  (_filteredSuggestions?.tags.toSet() ?? {}),
                               itemBuilder: (context, itemData) {
                                 final tag = state.tags[itemData]!;
                                 return ActionChip(
@@ -230,13 +261,17 @@ class _DocumentEditPageState extends State<DocumentEditPage> {
                                   ),
                                   backgroundColor: tag.color,
                                   onPressed: () {
-                                    final currentTags =
-                                        _formKey.currentState?.fields[fkTags]?.value as TagsQuery;
-                                    _formKey.currentState?.fields[fkTags]?.didChange(
+                                    final currentTags = _formKey.currentState
+                                        ?.fields[fkTags]?.value as TagsQuery;
+                                    _formKey.currentState?.fields[fkTags]
+                                        ?.didChange(
                                       currentTags.maybeWhen(
-                                        ids: (include, exclude) => TagsQuery.ids(
-                                            include: [...include, itemData], exclude: exclude),
-                                        orElse: () => TagsQuery.ids(include: [itemData]),
+                                        ids: (include, exclude) =>
+                                            TagsQuery.ids(
+                                                include: [...include, itemData],
+                                                exclude: exclude),
+                                        orElse: () =>
+                                            TagsQuery.ids(include: [itemData]),
                                       ),
                                     );
                                   },
@@ -278,12 +313,12 @@ class _DocumentEditPageState extends State<DocumentEditPage> {
       var mergedDocument = document.copyWith(
         title: values[fkTitle],
         created: values[fkCreatedDate],
-        documentType: () =>
-            (values[fkDocumentType] as IdQueryParameter).whenOrNull(fromId: (id) => id),
-        correspondent: () =>
-            (values[fkCorrespondent] as IdQueryParameter).whenOrNull(fromId: (id) => id),
-        storagePath: () =>
-            (values[fkStoragePath] as IdQueryParameter).whenOrNull(fromId: (id) => id),
+        documentType: () => (values[fkDocumentType] as IdQueryParameter)
+            .whenOrNull(fromId: (id) => id),
+        correspondent: () => (values[fkCorrespondent] as IdQueryParameter)
+            .whenOrNull(fromId: (id) => id),
+        storagePath: () => (values[fkStoragePath] as IdQueryParameter)
+            .whenOrNull(fromId: (id) => id),
         tags: (values[fkTags] as IdsTagsQuery).include,
         content: values[fkContent],
       );
@@ -340,7 +375,8 @@ class _DocumentEditPageState extends State<DocumentEditPage> {
             suggestions: _filteredSuggestions!.dates,
             itemBuilder: (context, itemData) => ActionChip(
               label: Text(DateFormat.yMMMd().format(itemData)),
-              onPressed: () => _formKey.currentState?.fields[fkCreatedDate]?.didChange(itemData),
+              onPressed: () => _formKey.currentState?.fields[fkCreatedDate]
+                  ?.didChange(itemData),
             ),
           ),
       ],
@@ -369,7 +405,8 @@ class _DocumentEditPageState extends State<DocumentEditPage> {
             itemBuilder: (context, index) => ColoredChipWrapper(
               child: itemBuilder(context, suggestions.elementAt(index)),
             ),
-            separatorBuilder: (BuildContext context, int index) => const SizedBox(width: 4.0),
+            separatorBuilder: (BuildContext context, int index) =>
+                const SizedBox(width: 4.0),
           ),
         ),
       ],
@@ -404,7 +441,6 @@ class _DocumentEditPageState extends State<DocumentEditPage> {
 // class OptionsFormField extends StatefulWidget {
 //   final List<Option> options;
 //   final void Function(Option option) onAddOption;
-
 
 //   const OptionsFormField({
 //     super.key,

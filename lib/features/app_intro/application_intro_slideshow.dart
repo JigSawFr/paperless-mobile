@@ -10,7 +10,8 @@ class ApplicationIntroSlideshow extends StatefulWidget {
   const ApplicationIntroSlideshow({super.key});
 
   @override
-  State<ApplicationIntroSlideshow> createState() => _ApplicationIntroSlideshowState();
+  State<ApplicationIntroSlideshow> createState() =>
+      _ApplicationIntroSlideshowState();
 }
 
 //TODO: INTL ALL

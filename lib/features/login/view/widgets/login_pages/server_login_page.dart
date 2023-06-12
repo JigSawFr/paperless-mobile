@@ -25,7 +25,8 @@ class _ServerLoginPageState extends State<ServerLoginPage> {
   @override
   Widget build(BuildContext context) {
     final serverAddress = (widget.formBuilderKey.currentState
-                ?.getRawValue(ServerAddressFormField.fkServerAddress) as String?)
+                    ?.getRawValue(ServerAddressFormField.fkServerAddress)
+                as String?)
             ?.replaceAll(RegExp(r'https?://'), '') ??
         '';
     return Scaffold(

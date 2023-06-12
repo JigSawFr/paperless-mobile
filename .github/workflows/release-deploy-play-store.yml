@@ -5,21 +5,18 @@ on:
   # Enable manual run
   workflow_dispatch:
     inputs:
-      lane:
-        description: "Fastlane lane"
-        required: true
-        default: "alpha"
+      track:
+        description: "Track"
         type: choice
-        options:
+        default: beta
+        options: 
           - internal
-          - promote_to_alpha
           - alpha
-          - promote_to_beta
           - beta
-          - promote_to_production
           - production
+
       is_draft:
-        description: "Only create a draft and don't automatically publish?"
+        description: "Mark as draft"
         required: true
         default: true
         type: boolean
@@ -64,8 +61,7 @@ jobs:
           working-directory: android
 
       # Build and deploy with Fastlane
-      # Naturally, promote_to_{alpha|beta|production} only deploys.
-      - run: bundle exec fastlane ${{ github.event.inputs.lane }} is_draft:${{ github.event.inputs.is_draft }}
+      - run: bundle exec fastlane publish_in_play_store is_draft:${{ github.event.inputs.is_draft }} track:${{ github.event.inputs.track }}
         env:
           PLAY_STORE_CREDENTIALS: ${{ secrets.PLAY_STORE_CREDENTIALS }}
         working-directory: android

@@ -11,7 +11,8 @@ import 'package:paperless_mobile/features/settings/model/view_type.dart';
 part 'document_search_cubit.g.dart';
 part 'document_search_state.dart';
 
-class DocumentSearchCubit extends Cubit<DocumentSearchState> with DocumentPagingBlocMixin {
+class DocumentSearchCubit extends Cubit<DocumentSearchState>
+    with DocumentPagingBlocMixin {
   @override
   final PaperlessDocumentsApi api;
 
@@ -23,7 +24,8 @@ class DocumentSearchCubit extends Cubit<DocumentSearchState> with DocumentPaging
     this.api,
     this.notifier,
     this._userAppState,
-  ) : super(DocumentSearchState(searchHistory: _userAppState.documentSearchHistory)) {
+  ) : super(DocumentSearchState(
+            searchHistory: _userAppState.documentSearchHistory)) {
     notifier.addListener(
       this,
       onDeleted: remove,
@@ -46,7 +48,8 @@ class DocumentSearchCubit extends Cubit<DocumentSearchState> with DocumentPaging
       state.copyWith(
         searchHistory: [
           query,
-          ...state.searchHistory.whereNot((previousQuery) => previousQuery == query)
+          ...state.searchHistory
+              .whereNot((previousQuery) => previousQuery == query)
         ],
       ),
     );
@@ -62,7 +65,9 @@ class DocumentSearchCubit extends Cubit<DocumentSearchState> with DocumentPaging
   void removeHistoryEntry(String entry) {
     emit(
       state.copyWith(
-        searchHistory: state.searchHistory.whereNot((element) => element == entry).toList(),
+        searchHistory: state.searchHistory
+            .whereNot((element) => element == entry)
+            .toList(),
       ),
     );
     _userAppState

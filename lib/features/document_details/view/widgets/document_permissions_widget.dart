@@ -6,7 +6,8 @@ class DocumentPermissionsWidget extends StatefulWidget {
   const DocumentPermissionsWidget({super.key, required this.document});
 
   @override
-  State<DocumentPermissionsWidget> createState() => _DocumentPermissionsWidgetState();
+  State<DocumentPermissionsWidget> createState() =>
+      _DocumentPermissionsWidgetState();
 }
 
 class _DocumentPermissionsWidgetState extends State<DocumentPermissionsWidget> {

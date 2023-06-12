@@ -9,7 +9,8 @@ import 'package:paperless_mobile/features/settings/model/view_type.dart';
 
 part 'saved_view_details_state.dart';
 
-class SavedViewDetailsCubit extends Cubit<SavedViewDetailsState> with DocumentPagingBlocMixin {
+class SavedViewDetailsCubit extends Cubit<SavedViewDetailsState>
+    with DocumentPagingBlocMixin {
   @override
   final PaperlessDocumentsApi api;
 

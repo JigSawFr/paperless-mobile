@@ -26,11 +26,14 @@ class ManageAccountsPage extends StatelessWidget {
           return const SizedBox.shrink();
         }
         return ValueListenableBuilder(
-          valueListenable: Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount).listenable(),
+          valueListenable:
+              Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount)
+                  .listenable(),
           builder: (context, box, _) {
             final userIds = box.keys.toList().cast<String>();
             final otherAccounts = userIds
-                .whereNot((element) => element == globalSettings.currentLoggedInUser)
+                .whereNot(
+                    (element) => element == globalSettings.currentLoggedInUser)
                 .toList();
             return SimpleDialog(
               insetPadding: const EdgeInsets.all(24),
@@ -68,10 +71,13 @@ class ManageAccountsPage extends StatelessWidget {
                       ],
                       onSelected: (value) async {
                         if (value == 0) {
-                          final currentUser = globalSettings.currentLoggedInUser!;
+                          final currentUser =
+                              globalSettings.currentLoggedInUser!;
                           await context.read<AuthenticationCubit>().logout();
                           Navigator.of(context).pop();
-                          await context.read<AuthenticationCubit>().removeAccount(currentUser);
+                          await context
+                              .read<AuthenticationCubit>()
+                              .removeAccount(currentUser);
                         }
                       },
                     ),
@@ -89,7 +95,8 @@ class ManageAccountsPage extends StatelessWidget {
                               PopupMenuItem(
                                 child: ListTile(
                                   title: Text(S.of(context)!.switchAccount),
-                                  leading: const Icon(Icons.switch_account_rounded),
+                                  leading:
+                                      const Icon(Icons.switch_account_rounded),
                                 ),
                                 value: 0,
                               ),
@@ -150,7 +157,8 @@ class ManageAccountsPage extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => LoginPage(
           titleString: S.of(context)!.addAccount,
-          onSubmit: (context, username, password, serverUrl, clientCertificate) async {
+          onSubmit: (context, username, password, serverUrl,
+              clientCertificate) async {
             final userId = await context.read<AuthenticationCubit>().addAccount(
                   credentials: LoginFormCredentials(
                     username: username,
@@ -179,7 +187,8 @@ class ManageAccountsPage extends StatelessWidget {
     }
   }
 
-  void _onSwitchAccount(BuildContext context, String currentUser, String newUser) async {
+  void _onSwitchAccount(
+      BuildContext context, String currentUser, String newUser) async {
     if (currentUser == newUser) return;
 
     Navigator.of(context).pop();

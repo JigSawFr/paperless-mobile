@@ -32,7 +32,8 @@ class ConnectivityStatusServiceImpl implements ConnectivityStatusService {
 
   @override
   Future<bool> isConnectedToInternet() async {
-    return _hasActiveInternetConnection(await (Connectivity().checkConnectivity()));
+    return _hasActiveInternetConnection(
+        await (Connectivity().checkConnectivity()));
   }
 
   @override
@@ -71,10 +72,11 @@ class ConnectivityStatusServiceImpl implements ConnectivityStatusService {
       return ReachabilityStatus.unknown;
     }
     try {
-      SessionManager manager = SessionManager([ServerReachabilityErrorInterceptor()])
-        ..updateSettings(clientCertificate: clientCertificate)
-        ..client.options.connectTimeout = const Duration(seconds: 5)
-        ..client.options.receiveTimeout = const Duration(seconds: 5);
+      SessionManager manager =
+          SessionManager([ServerReachabilityErrorInterceptor()])
+            ..updateSettings(clientCertificate: clientCertificate)
+            ..client.options.connectTimeout = const Duration(seconds: 5)
+            ..client.options.receiveTimeout = const Duration(seconds: 5);
 
       final response = await manager.client.get('$serverAddress/api/');
       if (response.statusCode == 200) {
@@ -82,7 +84,8 @@ class ConnectivityStatusServiceImpl implements ConnectivityStatusService {
       }
       return ReachabilityStatus.notReachable;
     } on DioError catch (error) {
-      if (error.type == DioErrorType.unknown && error.error is ReachabilityStatus) {
+      if (error.type == DioErrorType.unknown &&
+          error.error is ReachabilityStatus) {
         return error.error as ReachabilityStatus;
       }
     } on TlsException catch (error) {

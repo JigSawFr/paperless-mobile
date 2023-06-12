@@ -22,8 +22,10 @@ class EditTagPage extends StatelessWidget {
       child: EditLabelPage<Tag>(
         label: tag,
         fromJsonT: Tag.fromJson,
-        onSubmit: (context, label) => context.read<EditLabelCubit>().replaceTag(label),
-        onDelete: (context, label) => context.read<EditLabelCubit>().removeTag(label),
+        onSubmit: (context, label) =>
+            context.read<EditLabelCubit>().replaceTag(label),
+        onDelete: (context, label) =>
+            context.read<EditLabelCubit>().removeTag(label),
         canDelete: LocalUserAccount.current.paperlessUser.hasPermission(
           PermissionAction.delete,
           PermissionTarget.tag,

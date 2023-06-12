@@ -42,8 +42,9 @@ class DocumentDetailedItem extends DocumentItem {
         padding.bottom -
         kBottomNavigationBarHeight -
         kToolbarHeight;
-    final maxHeight =
-        highlights != null ? min(600.0, availableHeight) : min(500.0, availableHeight);
+    final maxHeight = highlights != null
+        ? min(600.0, availableHeight)
+        : min(500.0, availableHeight);
     return Card(
       color: isSelected ? Theme.of(context).colorScheme.inversePrimary : null,
       child: InkWell(
@@ -114,8 +115,10 @@ class DocumentDetailedItem extends DocumentItem {
                   textStyle: Theme.of(context).textTheme.titleSmall?.apply(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
-                  correspondent:
-                      context.watch<LabelRepository>().state.correspondents[document.correspondent],
+                  correspondent: context
+                      .watch<LabelRepository>()
+                      .state
+                      .correspondents[document.correspondent],
                 ),
               ],
             ).paddedLTRB(8, 0, 8, 4),
@@ -130,8 +133,10 @@ class DocumentDetailedItem extends DocumentItem {
                   textStyle: Theme.of(context).textTheme.titleSmall?.apply(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
-                  documentType:
-                      context.watch<LabelRepository>().state.documentTypes[document.documentType],
+                  documentType: context
+                      .watch<LabelRepository>()
+                      .state
+                      .documentTypes[document.documentType],
                 ),
               ],
             ).paddedLTRB(8, 0, 8, 4),

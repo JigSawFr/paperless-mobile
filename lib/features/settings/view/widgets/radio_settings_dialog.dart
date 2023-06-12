@@ -50,7 +50,8 @@ class _RadioSettingsDialogState<T> extends State<RadioSettingsDialog<T>> {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (widget.descriptionText != null)
-            Text(widget.descriptionText!, style: Theme.of(context).textTheme.bodySmall),
+            Text(widget.descriptionText!,
+                style: Theme.of(context).textTheme.bodySmall),
           ...widget.options.map(_buildOptionListTile),
           if (widget.footer != null) widget.footer!,
         ],

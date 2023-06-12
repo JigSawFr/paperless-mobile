@@ -53,36 +53,42 @@ class HomeRoute extends StatelessWidget {
                 Config(
                   // Isolated cache per user.
                   localUserId,
-                  fileService: DioFileService(context.read<SessionManager>().client),
+                  fileService:
+                      DioFileService(context.read<SessionManager>().client),
                 ),
               ),
             ),
             ProxyProvider<SessionManager, PaperlessDocumentsApi>(
-              update: (context, value, previous) => paperlessProviderFactory.createDocumentsApi(
+              update: (context, value, previous) =>
+                  paperlessProviderFactory.createDocumentsApi(
                 value.client,
                 apiVersion: paperlessApiVersion,
               ),
             ),
             ProxyProvider<SessionManager, PaperlessLabelsApi>(
-              update: (context, value, previous) => paperlessProviderFactory.createLabelsApi(
+              update: (context, value, previous) =>
+                  paperlessProviderFactory.createLabelsApi(
                 value.client,
                 apiVersion: paperlessApiVersion,
               ),
             ),
             ProxyProvider<SessionManager, PaperlessSavedViewsApi>(
-              update: (context, value, previous) => paperlessProviderFactory.createSavedViewsApi(
+              update: (context, value, previous) =>
+                  paperlessProviderFactory.createSavedViewsApi(
                 value.client,
                 apiVersion: paperlessApiVersion,
               ),
             ),
             ProxyProvider<SessionManager, PaperlessServerStatsApi>(
-              update: (context, value, previous) => paperlessProviderFactory.createServerStatsApi(
+              update: (context, value, previous) =>
+                  paperlessProviderFactory.createServerStatsApi(
                 value.client,
                 apiVersion: paperlessApiVersion,
               ),
             ),
             ProxyProvider<SessionManager, PaperlessTasksApi>(
-              update: (context, value, previous) => paperlessProviderFactory.createTasksApi(
+              update: (context, value, previous) =>
+                  paperlessProviderFactory.createTasksApi(
                 value.client,
                 apiVersion: paperlessApiVersion,
               ),
@@ -98,26 +104,33 @@ class HomeRoute extends StatelessWidget {
             return MultiProvider(
               providers: [
                 ProxyProvider<PaperlessLabelsApi, LabelRepository>(
-                  update: (context, value, previous) => LabelRepository(value)..initialize(),
+                  update: (context, value, previous) =>
+                      LabelRepository(value)..initialize(),
                 ),
                 ProxyProvider<PaperlessSavedViewsApi, SavedViewRepository>(
-                  update: (context, value, previous) => SavedViewRepository(value)..initialize(),
+                  update: (context, value, previous) =>
+                      SavedViewRepository(value)..initialize(),
                 ),
               ],
               builder: (context, child) {
                 return MultiProvider(
                   providers: [
-                    ProxyProvider3<PaperlessDocumentsApi, DocumentChangedNotifier, LabelRepository,
+                    ProxyProvider3<
+                        PaperlessDocumentsApi,
+                        DocumentChangedNotifier,
+                        LabelRepository,
                         DocumentsCubit>(
-                      update: (context, docApi, notifier, labelRepo, previous) => DocumentsCubit(
+                      update:
+                          (context, docApi, notifier, labelRepo, previous) =>
+                              DocumentsCubit(
                         docApi,
                         notifier,
                         labelRepo,
                         Hive.box<LocalUserAppState>(HiveBoxes.localUserAppState)
                             .get(currentLocalUserId)!,
-                      )..reload(),
+                      )..initialize(),
                     ),
-                    Provider(create: (context) => DocumentScannerCubit()),
+                    Provider(create: (context) => DocumentScannerCubit(context.read())),
                     ProxyProvider4<PaperlessDocumentsApi, PaperlessServerStatsApi, LabelRepository,
                         DocumentChangedNotifier, InboxCubit>(
                       update: (context, docApi, statsApi, labelRepo, notifier, previous) =>
@@ -129,19 +142,22 @@ class HomeRoute extends StatelessWidget {
                       )..initialize(),
                     ),
                     ProxyProvider<SavedViewRepository, SavedViewCubit>(
-                      update: (context, savedViewRepo, previous) => SavedViewCubit(
+                      update: (context, savedViewRepo, previous) =>
+                          SavedViewCubit(
                         savedViewRepo,
-                      )..initialize(),
+                      ),
                     ),
                     ProxyProvider<LabelRepository, LabelCubit>(
                       update: (context, value, previous) => LabelCubit(value),
                     ),
                     ProxyProvider<PaperlessTasksApi, TaskStatusCubit>(
-                      update: (context, value, previous) => TaskStatusCubit(value),
+                      update: (context, value, previous) =>
+                          TaskStatusCubit(value),
                     ),
                     if (paperlessApiVersion >= 3)
                       ProxyProvider<PaperlessUserApiV3, UserRepository>(
-                        update: (context, value, previous) => UserRepository(value)..initialize(),
+                        update: (context, value, previous) =>
+                            UserRepository(value)..initialize(),
                       ),
                   ],
                   child: HomePage(paperlessApiVersion: paperlessApiVersion),

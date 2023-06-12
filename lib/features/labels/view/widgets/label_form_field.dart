@@ -58,8 +58,8 @@ class LabelFormField<T extends Label> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isEnabled =
-        options.values.any((e) => (e.documentCount ?? 0) > 0) || addLabelPageBuilder != null;
+    final isEnabled = options.values.any((e) => (e.documentCount ?? 0) > 0) ||
+        addLabelPageBuilder != null;
     return FormBuilderField<IdQueryParameter>(
       name: name,
       initialValue: initialValue,
@@ -70,7 +70,9 @@ class LabelFormField<T extends Label> extends StatelessWidget {
           text: _buildText(context, field.value),
         );
         final displayedSuggestions = suggestions
-            .whereNot((e) => e.id == field.value?.maybeWhen(fromId: (id) => id, orElse: () => -1))
+            .whereNot((e) =>
+                e.id ==
+                field.value?.maybeWhen(fromId: (id) => id, orElse: () => -1))
             .toList();
 
         return Column(
@@ -95,7 +97,8 @@ class LabelFormField<T extends Label> extends StatelessWidget {
                     suffixIcon: controller.text.isNotEmpty
                         ? IconButton(
                             icon: const Icon(Icons.clear),
-                            onPressed: () => field.didChange(const IdQueryParameter.unset()),
+                            onPressed: () =>
+                                field.didChange(const IdQueryParameter.unset()),
                           )
                         : null,
                   ),
@@ -110,7 +113,8 @@ class LabelFormField<T extends Label> extends StatelessWidget {
                     ? (initialName) {
                         return Navigator.of(context).push<T>(
                           MaterialPageRoute(
-                            builder: (context) => addLabelPageBuilder!(initialName),
+                            builder: (context) =>
+                                addLabelPageBuilder!(initialName),
                           ),
                         );
                       }
@@ -141,7 +145,8 @@ class LabelFormField<T extends Label> extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemCount: displayedSuggestions.length,
                       itemBuilder: (context, index) {
-                        final suggestion = displayedSuggestions.elementAt(index);
+                        final suggestion =
+                            displayedSuggestions.elementAt(index);
                         return ColoredChipWrapper(
                           child: ActionChip(
                             label: Text(suggestion.name),

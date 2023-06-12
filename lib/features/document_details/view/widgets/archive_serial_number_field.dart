@@ -18,7 +18,8 @@ class ArchiveSerialNumberField extends StatefulWidget {
   });
 
   @override
-  State<ArchiveSerialNumberField> createState() => _ArchiveSerialNumberFieldState();
+  State<ArchiveSerialNumberField> createState() =>
+      _ArchiveSerialNumberFieldState();
 }
 
 class _ArchiveSerialNumberFieldState extends State<ArchiveSerialNumberField> {
@@ -39,21 +40,25 @@ class _ArchiveSerialNumberFieldState extends State<ArchiveSerialNumberField> {
   void _clearButtonListener() {
     setState(() {
       _showClearButton = _asnEditingController.text.isNotEmpty;
-      _canUpdate = int.tryParse(_asnEditingController.text) != widget.document.archiveSerialNumber;
+      _canUpdate = int.tryParse(_asnEditingController.text) !=
+          widget.document.archiveSerialNumber;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final userCanEditDocument = LocalUserAccount.current.paperlessUser.hasPermission(
+    final userCanEditDocument =
+        LocalUserAccount.current.paperlessUser.hasPermission(
       PermissionAction.change,
       PermissionTarget.document,
     );
     return BlocListener<DocumentDetailsCubit, DocumentDetailsState>(
       listenWhen: (previous, current) =>
-          previous.document.archiveSerialNumber != current.document.archiveSerialNumber,
+          previous.document.archiveSerialNumber !=
+          current.document.archiveSerialNumber,
       listener: (context, state) {
-        _asnEditingController.text = state.document.archiveSerialNumber?.toString() ?? '';
+        _asnEditingController.text =
+            state.document.archiveSerialNumber?.toString() ?? '';
         setState(() {
           _canUpdate = false;
         });
@@ -80,13 +85,17 @@ class _ArchiveSerialNumberFieldState extends State<ArchiveSerialNumberField> {
                     IconButton(
                       icon: const Icon(Icons.clear),
                       color: Theme.of(context).colorScheme.primary,
-                      onPressed: userCanEditDocument ? _asnEditingController.clear : null,
+                      onPressed: userCanEditDocument
+                          ? _asnEditingController.clear
+                          : null,
                     ),
                   IconButton(
                     icon: const Icon(Icons.plus_one_rounded),
                     color: Theme.of(context).colorScheme.primary,
                     onPressed:
-                        context.watchInternetConnection && !_showClearButton ? _onAutoAssign : null,
+                        context.watchInternetConnection && !_showClearButton
+                            ? _onAutoAssign
+                            : null,
                   ).paddedOnly(right: 8),
                 ],
               ),
@@ -97,7 +106,9 @@ class _ArchiveSerialNumberFieldState extends State<ArchiveSerialNumberField> {
           ),
           TextButton.icon(
             icon: const Icon(Icons.done),
-            onPressed: context.watchInternetConnection && _canUpdate ? _onSubmitted : null,
+            onPressed: context.watchInternetConnection && _canUpdate
+                ? _onSubmitted
+                : null,
             label: Text(S.of(context)!.save),
           ).padded(),
         ],

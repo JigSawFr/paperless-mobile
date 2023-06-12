@@ -12,7 +12,8 @@ class ThemeModeSetting extends StatelessWidget {
       builder: (context, settings) {
         return ListTile(
           title: Text(S.of(context)!.appearance),
-          subtitle: Text(_mapThemeModeToLocalizedString(settings.preferredThemeMode, context)),
+          subtitle: Text(_mapThemeModeToLocalizedString(
+              settings.preferredThemeMode, context)),
           onTap: () => showDialog<ThemeMode>(
             context: context,
             builder: (_) => RadioSettingsDialog<ThemeMode>(

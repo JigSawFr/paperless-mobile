@@ -41,7 +41,10 @@ class LocalUserAppState extends HiveObject {
 
   static LocalUserAppState get current {
     final currentLocalUserId =
-        Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!.currentLoggedInUser!;
-    return Hive.box<LocalUserAppState>(HiveBoxes.localUserAppState).get(currentLocalUserId)!;
+        Hive.box<GlobalSettings>(HiveBoxes.globalSettings)
+            .getValue()!
+            .currentLoggedInUser!;
+    return Hive.box<LocalUserAppState>(HiveBoxes.localUserAppState)
+        .get(currentLocalUserId)!;
   }
 }

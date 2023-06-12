@@ -14,7 +14,8 @@ class UserCredentialsFormField extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<UserCredentialsFormField> createState() => _UserCredentialsFormFieldState();
+  State<UserCredentialsFormField> createState() =>
+      _UserCredentialsFormFieldState();
 }
 
 class _UserCredentialsFormFieldState extends State<UserCredentialsFormField> {

@@ -30,8 +30,9 @@ class DocumentGridItem extends DocumentItem {
       padding: const EdgeInsets.all(8.0),
       child: Card(
         elevation: 1.0,
-        color:
-            isSelected ? Theme.of(context).colorScheme.inversePrimary : Theme.of(context).cardColor,
+        color: isSelected
+            ? Theme.of(context).colorScheme.inversePrimary
+            : Theme.of(context).cardColor,
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: _onTap,
@@ -74,7 +75,8 @@ class DocumentGridItem extends DocumentItem {
                       const Spacer(),
                       TagsWidget(
                         tags: document.tags
-                            .map((e) => context.watch<LabelRepository>().state.tags[e]!)
+                            .map((e) =>
+                                context.watch<LabelRepository>().state.tags[e]!)
                             .toList(),
                         isMultiLine: false,
                         onTagSelected: onTagSelected,

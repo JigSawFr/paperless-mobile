@@ -78,7 +78,8 @@ class DioHttpErrorInterceptor extends Interceptor {
         DioError(
           requestOptions: err.requestOptions,
           type: DioErrorType.badResponse,
-          error: const PaperlessServerException(ErrorCode.missingClientCertificate),
+          error: const PaperlessServerException(
+              ErrorCode.missingClientCertificate),
         ),
       );
     }

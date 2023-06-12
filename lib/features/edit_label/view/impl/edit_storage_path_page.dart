@@ -19,8 +19,10 @@ class EditStoragePathPage extends StatelessWidget {
       child: EditLabelPage<StoragePath>(
         label: storagePath,
         fromJsonT: StoragePath.fromJson,
-        onSubmit: (context, label) => context.read<EditLabelCubit>().replaceStoragePath(label),
-        onDelete: (context, label) => context.read<EditLabelCubit>().removeStoragePath(label),
+        onSubmit: (context, label) =>
+            context.read<EditLabelCubit>().replaceStoragePath(label),
+        onDelete: (context, label) =>
+            context.read<EditLabelCubit>().removeStoragePath(label),
         canDelete: LocalUserAccount.current.paperlessUser.hasPermission(
           PermissionAction.delete,
           PermissionTarget.storagePath,

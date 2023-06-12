@@ -161,101 +161,96 @@ class _DocumentsPageState extends State<DocumentsPage>
                   }
                   return true;
                 },
-                child: Stack(
-                  children: [
-                    NestedScrollView(
-                      floatHeaderSlivers: true,
-                      headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                        SliverOverlapAbsorber(
-                          handle: searchBarHandle,
-                          sliver: BlocBuilder<DocumentsCubit, DocumentsState>(
-                            builder: (context, state) {
-                              if (state.selection.isEmpty) {
-                                return const SliverSearchBar(floating: true);
-                              } else {
-                                return DocumentSelectionSliverAppBar(
-                                  state: state,
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                        SliverOverlapAbsorber(
-                          handle: tabBarHandle,
-                          sliver: BlocBuilder<DocumentsCubit, DocumentsState>(
-                            builder: (context, state) {
-                              if (state.selection.isNotEmpty) {
-                                return const SliverToBoxAdapter(
-                                  child: SizedBox.shrink(),
-                                );
-                              }
-                              return SliverPersistentHeader(
-                                pinned: true,
-                                delegate:
-                                    CustomizableSliverPersistentHeaderDelegate(
-                                  minExtent: kTextTabBarHeight,
-                                  maxExtent: kTextTabBarHeight,
-                                  child: ColoredTabBar(
-                                    tabBar: TabBar(
-                                      controller: _tabController,
-                                      tabs: [
-                                        Tab(text: S.of(context)!.documents),
-                                        Tab(text: S.of(context)!.views),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                      body: NotificationListener<ScrollNotification>(
-                        onNotification: (notification) {
-                          final metrics = notification.metrics;
-                          if (metrics.maxScrollExtent == 0) {
-                            return true;
+                child: NestedScrollView(
+                  floatHeaderSlivers: true,
+                  headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                    SliverOverlapAbsorber(
+                      handle: searchBarHandle,
+                      sliver: BlocBuilder<DocumentsCubit, DocumentsState>(
+                        builder: (context, state) {
+                          if (state.selection.isEmpty) {
+                            return const SliverSearchBar(floating: true);
+                          } else {
+                            return DocumentSelectionSliverAppBar(
+                              state: state,
+                            );
                           }
-                          final desiredTab =
-                              (metrics.pixels / metrics.maxScrollExtent)
-                                  .round();
-                          if (metrics.axis == Axis.horizontal &&
-                              _currentTab != desiredTab) {
-                            setState(() => _currentTab = desiredTab);
-                          }
-                          return false;
                         },
-                        child: TabBarView(
-                          controller: _tabController,
-                          physics: context
-                                  .watch<DocumentsCubit>()
-                                  .state
-                                  .selection
-                                  .isNotEmpty
-                              ? const NeverScrollableScrollPhysics()
-                              : null,
-                          children: [
-                            Builder(
-                              builder: (context) {
-                                return _buildDocumentsTab(
-                                  connectivityState,
-                                  context,
-                                );
-                              },
+                      ),
+                    ),
+                    SliverOverlapAbsorber(
+                      handle: tabBarHandle,
+                      sliver: BlocBuilder<DocumentsCubit, DocumentsState>(
+                        builder: (context, state) {
+                          if (state.selection.isNotEmpty) {
+                            return const SliverToBoxAdapter(
+                              child: SizedBox.shrink(),
+                            );
+                          }
+                          return SliverPersistentHeader(
+                            pinned: true,
+                            delegate:
+                                CustomizableSliverPersistentHeaderDelegate(
+                              minExtent: kTextTabBarHeight,
+                              maxExtent: kTextTabBarHeight,
+                              child: ColoredTabBar(
+                                tabBar: TabBar(
+                                  controller: _tabController,
+                                  tabs: [
+                                    Tab(text: S.of(context)!.documents),
+                                    Tab(text: S.of(context)!.views),
+                                  ],
+                                ),
+                              ),
                             ),
-                            Builder(
-                              builder: (context) {
-                                return _buildSavedViewsTab(
-                                  connectivityState,
-                                  context,
-                                );
-                              },
-                            ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
                     ),
                   ],
+                  body: NotificationListener<ScrollNotification>(
+                    onNotification: (notification) {
+                      final metrics = notification.metrics;
+                      if (metrics.maxScrollExtent == 0) {
+                        return true;
+                      }
+                      final desiredTab =
+                          (metrics.pixels / metrics.maxScrollExtent).round();
+                      if (metrics.axis == Axis.horizontal &&
+                          _currentTab != desiredTab) {
+                        setState(() => _currentTab = desiredTab);
+                      }
+                      return false;
+                    },
+                    child: TabBarView(
+                      controller: _tabController,
+                      physics: context
+                              .watch<DocumentsCubit>()
+                              .state
+                              .selection
+                              .isNotEmpty
+                          ? const NeverScrollableScrollPhysics()
+                          : null,
+                      children: [
+                        Builder(
+                          builder: (context) {
+                            return _buildDocumentsTab(
+                              connectivityState,
+                              context,
+                            );
+                          },
+                        ),
+                        Builder(
+                          builder: (context) {
+                            return _buildSavedViewsTab(
+                              connectivityState,
+                              context,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),

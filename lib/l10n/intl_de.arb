@@ -811,5 +811,18 @@
   "goToLogin": "Gehe zur Anmeldung",
   "@goToLogin": {
     "description": "Label of the button shown on the login page to skip logging in to existing accounts and navigate user to login page"
-  }
+  },
+  "export": "Exportieren",
+  "@export": {
+    "description": "Label for button that exports scanned images to pdf (before upload)"
+  },
+  "invalidFilenameCharacter": "Ungültige(s) Zeichen im Dateinamen gefunden: {characters}",
+  "@invalidFilenameCharacter": {
+    "description": "For validating filename in export dialogue"
+  },
+  "exportScansToPdf": "Scans als PDF exportieren",
+  "@exportScansToPdf": {
+    "description": "title of the alert dialog when exporting scans to pdf"
+  },
+  "allScansWillBeMerged": "Alle Scans werden in eine einzige PDF-Datei zusammengeführt."
 }

@@ -22,7 +22,8 @@ class _DocumentViewState extends State<DocumentView> {
 
   @override
   Widget build(BuildContext context) {
-    final isInitialized = _controller != null && _currentPage != null && _totalPages != null;
+    final isInitialized =
+        _controller != null && _currentPage != null && _totalPages != null;
     final canGoToNextPage = isInitialized && _currentPage! + 1 < _totalPages!;
     final canGoToPreviousPage = isInitialized && _currentPage! > 0;
     return Scaffold(

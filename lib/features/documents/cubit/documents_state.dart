@@ -86,7 +86,8 @@ class DocumentsState extends DocumentPagingState {
     );
   }
 
-  factory DocumentsState.fromJson(Map<String, dynamic> json) => _$DocumentsStateFromJson(json);
+  factory DocumentsState.fromJson(Map<String, dynamic> json) =>
+      _$DocumentsStateFromJson(json);
 
   Map<String, dynamic> toJson() => _$DocumentsStateToJson(this);
 }

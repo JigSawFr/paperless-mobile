@@ -129,8 +129,9 @@ class _FullscreenTagsFormState extends State<FullscreenTagsForm> {
           ),
         ],
         bottom: PreferredSize(
-          preferredSize:
-              !widget.allowOnlySelection ? const Size.fromHeight(32) : const Size.fromHeight(1),
+          preferredSize: !widget.allowOnlySelection
+              ? const Size.fromHeight(32)
+              : const Size.fromHeight(1),
           child: Column(
             children: [
               Divider(color: theme.colorScheme.outline),
@@ -233,7 +234,8 @@ class _FullscreenTagsFormState extends State<FullscreenTagsForm> {
       yield _buildNotAssignedOption();
     }
 
-    var matches = _options.where((e) => e.name.trim().toLowerCase().contains(normalizedQuery));
+    var matches = _options
+        .where((e) => e.name.trim().toLowerCase().contains(normalizedQuery));
     if (matches.isEmpty && widget.allowCreation) {
       yield Text(S.of(context)!.noItemsFound);
       yield TextButton(
@@ -299,7 +301,9 @@ class SelectableTagWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(tag.name),
-      trailing: excluded ? const Icon(Icons.close) : (selected ? const Icon(Icons.done) : null),
+      trailing: excluded
+          ? const Icon(Icons.close)
+          : (selected ? const Icon(Icons.done) : null),
       leading: CircleAvatar(
         backgroundColor: tag.color,
         child: (tag.isInboxTag)

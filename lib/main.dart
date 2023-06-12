@@ -52,7 +52,8 @@ import 'package:mock_server/mock_server.dart';
 
 String get defaultPreferredLocaleSubtag {
   String preferredLocale = Platform.localeName.split("_").first;
-  if (!S.supportedLocales.any((locale) => locale.languageCode == preferredLocale)) {
+  if (!S.supportedLocales
+      .any((locale) => locale.languageCode == preferredLocale)) {
     preferredLocale = 'en';
   }
   return preferredLocale;
@@ -65,7 +66,8 @@ Future<void> _initHive() async {
   await Hive.openBox<LocalUserAccount>(HiveBoxes.localUserAccount);
   await Hive.openBox<LocalUserAppState>(HiveBoxes.localUserAppState);
   await Hive.openBox<String>(HiveBoxes.hosts);
-  final globalSettingsBox = await Hive.openBox<GlobalSettings>(HiveBoxes.globalSettings);
+  final globalSettingsBox =
+      await Hive.openBox<GlobalSettings>(HiveBoxes.globalSettings);
 
   if (!globalSettingsBox.hasValue) {
     await globalSettingsBox.setValue(
@@ -132,7 +134,8 @@ void main() async {
 
   //Update language header in interceptor on language change.
   globalSettingsBox.listenable().addListener(() {
-    languageHeaderInterceptor.preferredLocaleSubtag = globalSettings.preferredLocaleSubtag;
+    languageHeaderInterceptor.preferredLocaleSubtag =
+        globalSettings.preferredLocaleSubtag;
   });
 
   final apiFactory = PaperlessApiFactoryImpl(sessionManager);
@@ -142,15 +145,19 @@ void main() async {
       providers: [
         ChangeNotifierProvider.value(value: sessionManager),
         Provider<LocalAuthenticationService>.value(value: localAuthService),
-        Provider<ConnectivityStatusService>.value(value: connectivityStatusService),
-        Provider<LocalNotificationService>.value(value: localNotificationService),
+        Provider<Connectivity>.value(value: connectivity),
+        Provider<ConnectivityStatusService>.value(
+            value: connectivityStatusService),
+        Provider<LocalNotificationService>.value(
+            value: localNotificationService),
         Provider.value(value: DocumentChangedNotifier()),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider<ConnectivityCubit>.value(value: connectivityCubit),
           BlocProvider(
-            create: (context) => AuthenticationCubit(localAuthService, apiFactory, sessionManager),
+            create: (context) => AuthenticationCubit(
+                localAuthService, apiFactory, sessionManager),
           )
         ],
         child: PaperlessMobileEntrypoint(
@@ -169,7 +176,8 @@ class PaperlessMobileEntrypoint extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<PaperlessMobileEntrypoint> createState() => _PaperlessMobileEntrypointState();
+  State<PaperlessMobileEntrypoint> createState() =>
+      _PaperlessMobileEntrypointState();
 }
 
 class _PaperlessMobileEntrypointState extends State<PaperlessMobileEntrypoint> {
@@ -224,19 +232,12 @@ class AuthenticationWrapper extends StatefulWidget {
 }
 
 class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
-  late final StreamSubscription _shareMediaSubscription;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     context.read<AuthenticationCubit>().restoreSessionState().then((value) {
       FlutterNativeSplash.remove();
     });
-  }
-
-  @override
-  void dispose() {
-    _shareMediaSubscription.cancel();
-    super.dispose();
   }
 
   @override
@@ -248,11 +249,6 @@ class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
       _setOptimalDisplayMode();
     }
     initializeDateFormatting();
-    // For sharing files coming from outside the app while the app is still opened
-    _shareMediaSubscription =
-        ReceiveSharingIntent.getMediaStream().listen(ShareIntentQueue.instance.addAll);
-    // For sharing files coming from outside the app while the app is closed
-    ReceiveSharingIntent.getInitialMedia().then(ShareIntentQueue.instance.addAll);
   }
 
   Future<void> _setOptimalDisplayMode() async {
@@ -264,7 +260,8 @@ class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
         .toList()
       ..sort((a, b) => b.refreshRate.compareTo(a.refreshRate));
 
-    final DisplayMode mostOptimalMode = sameResolution.isNotEmpty ? sameResolution.first : active;
+    final DisplayMode mostOptimalMode =
+        sameResolution.isNotEmpty ? sameResolution.first : active;
     debugPrint('Setting refresh rate to ${mostOptimalMode.refreshRate}');
 
     await FlutterDisplayMode.setPreferredMode(mostOptimalMode);
@@ -303,12 +300,14 @@ class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
   ) async {
     try {
       await context.read<AuthenticationCubit>().login(
-            credentials: LoginFormCredentials(username: username, password: password),
+            credentials:
+                LoginFormCredentials(username: username, password: password),
             serverUrl: serverUrl,
             clientCertificate: clientCertificate,
           );
       // Show onboarding after first login!
-      final globalSettings = Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!;
+      final globalSettings =
+          Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!;
       if (globalSettings.showOnboarding) {
         Navigator.push(
           context,

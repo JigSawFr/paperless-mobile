@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       is_draft:
-        description: "Only create a draft and don't automatically publish?"
+        description: "Mark as draft"
         required: true
         default: true
         type: boolean

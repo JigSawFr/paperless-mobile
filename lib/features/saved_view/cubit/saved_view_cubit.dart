@@ -11,17 +11,17 @@ part 'saved_view_cubit.freezed.dart';
 class SavedViewCubit extends Cubit<SavedViewState> {
   final SavedViewRepository _savedViewRepository;
 
-  SavedViewCubit(this._savedViewRepository) : super(const SavedViewState.initial()) {
+  SavedViewCubit(this._savedViewRepository)
+      : super(const SavedViewState.initial()) {
     _savedViewRepository.addListener(
       this,
       onChanged: (views) {
-        emit(
-          state.maybeWhen(
-            loaded: (savedViews) => (state as _SavedViewLoadedState).copyWith(
-              savedViews: views.savedViews,
-            ),
-            orElse: () => state,
-          ),
+        views.when(
+          initial: (savedViews) => emit(const SavedViewState.initial()),
+          loading: (savedViews) => emit(const SavedViewState.loading()),
+          loaded: (savedViews) =>
+              emit(SavedViewState.loaded(savedViews: savedViews)),
+          error: (savedViews) => emit(const SavedViewState.error()),
         );
       },
     );
@@ -35,7 +35,7 @@ class SavedViewCubit extends Cubit<SavedViewState> {
     return _savedViewRepository.delete(view);
   }
 
-  Future<void> initialize() async {
+  Future<void> reload() async {
     final views = await _savedViewRepository.findAll();
     final values = {for (var element in views) element.id!: element};
     if (!isClosed) {
@@ -46,8 +46,6 @@ class SavedViewCubit extends Cubit<SavedViewState> {
       );
     }
   }
-
-  Future<void> reload() => initialize();
 
   @override
   Future<void> close() {

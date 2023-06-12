@@ -33,12 +33,15 @@ class DocumentSelectionSliverAppBar extends StatelessWidget {
           onPressed: () async {
             final shouldDelete = await showDialog<bool>(
                   context: context,
-                  builder: (context) => BulkDeleteConfirmationDialog(state: state),
+                  builder: (context) =>
+                      BulkDeleteConfirmationDialog(state: state),
                 ) ??
                 false;
             if (shouldDelete) {
               try {
-                await context.read<DocumentsCubit>().bulkDelete(state.selection);
+                await context
+                    .read<DocumentsCubit>()
+                    .bulkDelete(state.selection);
                 showSnackBar(
                   context,
                   S.of(context)!.documentsSuccessfullyDeleted,
@@ -62,21 +65,24 @@ class DocumentSelectionSliverAppBar extends StatelessWidget {
                 label: Text(S.of(context)!.correspondent),
                 avatar: const Icon(Icons.edit),
                 onPressed: () {
-                  pushBulkEditCorrespondentRoute(context, selection: state.selection);
+                  pushBulkEditCorrespondentRoute(context,
+                      selection: state.selection);
                 },
               ).paddedOnly(left: 8, right: 4),
               ActionChip(
                 label: Text(S.of(context)!.documentType),
                 avatar: const Icon(Icons.edit),
                 onPressed: () async {
-                  pushBulkEditDocumentTypeRoute(context, selection: state.selection);
+                  pushBulkEditDocumentTypeRoute(context,
+                      selection: state.selection);
                 },
               ).paddedOnly(left: 8, right: 4),
               ActionChip(
                 label: Text(S.of(context)!.storagePath),
                 avatar: const Icon(Icons.edit),
                 onPressed: () async {
-                  pushBulkEditStoragePathRoute(context, selection: state.selection);
+                  pushBulkEditStoragePathRoute(context,
+                      selection: state.selection);
                 },
               ).paddedOnly(left: 8, right: 4),
               _buildBulkEditTagsChip(context).paddedOnly(left: 4, right: 4),

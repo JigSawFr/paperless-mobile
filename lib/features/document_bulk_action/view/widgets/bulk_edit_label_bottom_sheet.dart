@@ -8,7 +8,8 @@ import 'package:paperless_mobile/features/document_bulk_action/cubit/document_bu
 import 'package:paperless_mobile/features/labels/view/widgets/label_form_field.dart';
 import 'package:paperless_mobile/generated/l10n/app_localizations.dart';
 
-typedef LabelOptionsSelector<T extends Label> = Map<int, T> Function(DocumentBulkActionState state);
+typedef LabelOptionsSelector<T extends Label> = Map<int, T> Function(
+    DocumentBulkActionState state);
 
 class BulkEditLabelBottomSheet<T extends Label> extends StatefulWidget {
   final String title;
@@ -31,16 +32,19 @@ class BulkEditLabelBottomSheet<T extends Label> extends StatefulWidget {
   });
 
   @override
-  State<BulkEditLabelBottomSheet<T>> createState() => _BulkEditLabelBottomSheetState<T>();
+  State<BulkEditLabelBottomSheet<T>> createState() =>
+      _BulkEditLabelBottomSheetState<T>();
 }
 
-class _BulkEditLabelBottomSheetState<T extends Label> extends State<BulkEditLabelBottomSheet<T>> {
+class _BulkEditLabelBottomSheetState<T extends Label>
+    extends State<BulkEditLabelBottomSheet<T>> {
   final _formKey = GlobalKey<FormBuilderState>();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: BlocBuilder<DocumentBulkActionCubit, DocumentBulkActionState>(
         builder: (context, state) {
           return Padding(
@@ -76,11 +80,13 @@ class _BulkEditLabelBottomSheetState<T extends Label> extends State<BulkEditLabe
                       const SizedBox(width: 16),
                       FilledButton(
                         onPressed: () {
-                          if (_formKey.currentState?.saveAndValidate() ?? false) {
-                            final value = _formKey.currentState?.getRawValue('labelFormField')
+                          if (_formKey.currentState?.saveAndValidate() ??
+                              false) {
+                            final value = _formKey.currentState
+                                    ?.getRawValue('labelFormField')
                                 as IdQueryParameter?;
-                            widget
-                                .onSubmit(value?.maybeWhen(fromId: (id) => id, orElse: () => null));
+                            widget.onSubmit(value?.maybeWhen(
+                                fromId: (id) => id, orElse: () => null));
                           }
                         },
                         child: Text(S.of(context)!.apply),

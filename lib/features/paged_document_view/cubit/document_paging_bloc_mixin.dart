@@ -35,6 +35,10 @@ mixin DocumentPagingBlocMixin<State extends DocumentPagingState>
     }
   }
 
+  Future<void> initialize() {
+    return updateFilter();
+  }
+
   ///
   /// Updates document filter and automatically reloads documents. Always resets page to 1.
   /// Use [loadMore] to load more data.

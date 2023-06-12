@@ -51,27 +51,35 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
     final tabLength = 4 + (apiVersion.hasMultiUserSupport ? 1 : 0);
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pop(context.read<DocumentDetailsCubit>().state.document);
+        Navigator.of(context)
+            .pop(context.read<DocumentDetailsCubit>().state.document);
         return false;
       },
       child: DefaultTabController(
         length: tabLength,
         child: BlocListener<ConnectivityCubit, ConnectivityState>(
-          listenWhen: (previous, current) => !previous.isConnected && current.isConnected,
+          listenWhen: (previous, current) =>
+              !previous.isConnected && current.isConnected,
           listener: (context, state) {
             context.read<DocumentDetailsCubit>().loadMetaData();
           },
           child: Scaffold(
             extendBodyBehindAppBar: false,
-            floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.endDocked,
             floatingActionButton: _buildEditButton(),
             bottomNavigationBar: _buildBottomAppBar(),
             body: NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) => [
                 SliverOverlapAbsorber(
-                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                  handle:
+                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                   sliver: SliverAppBar(
-                    title: Text(context.watch<DocumentDetailsCubit>().state.document.title),
+                    title: Text(context
+                        .watch<DocumentDetailsCubit>()
+                        .state
+                        .document
+                        .title),
                     leading: const BackButton(),
                     pinned: true,
                     forceElevated: innerBoxIsScrolled,
@@ -81,7 +89,8 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
                       background: Stack(
                         alignment: Alignment.topCenter,
                         children: [
-                          BlocBuilder<DocumentDetailsCubit, DocumentDetailsState>(
+                          BlocBuilder<DocumentDetailsCubit,
+                              DocumentDetailsState>(
                             builder: (context, state) {
                               return Positioned.fill(
                                 child: DocumentPreview(
@@ -97,8 +106,14 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   colors: [
-                                    Theme.of(context).colorScheme.background.withOpacity(0.8),
-                                    Theme.of(context).colorScheme.background.withOpacity(0.5),
+                                    Theme.of(context)
+                                        .colorScheme
+                                        .background
+                                        .withOpacity(0.8),
+                                    Theme.of(context)
+                                        .colorScheme
+                                        .background
+                                        .withOpacity(0.5),
                                     Colors.transparent,
                                     Colors.transparent,
                                     Colors.transparent,
@@ -120,7 +135,9 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
                             child: Text(
                               S.of(context)!.overview,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer,
                               ),
                             ),
                           ),
@@ -128,7 +145,9 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
                             child: Text(
                               S.of(context)!.content,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer,
                               ),
                             ),
                           ),
@@ -136,7 +155,9 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
                             child: Text(
                               S.of(context)!.metaData,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer,
                               ),
                             ),
                           ),
@@ -144,7 +165,9 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
                             child: Text(
                               S.of(context)!.similarDocuments,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer,
                               ),
                             ),
                           ),
@@ -153,7 +176,9 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
                               child: Text(
                                 "Permissions",
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
                                 ),
                               ),
                             ),
@@ -182,7 +207,8 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
                           CustomScrollView(
                             slivers: [
                               SliverOverlapInjector(
-                                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                                handle: NestedScrollView
+                                    .sliverOverlapAbsorberHandleFor(context),
                               ),
                               DocumentOverviewWidget(
                                 document: state.document,
@@ -198,7 +224,8 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
                           CustomScrollView(
                             slivers: [
                               SliverOverlapInjector(
-                                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                                handle: NestedScrollView
+                                    .sliverOverlapAbsorberHandleFor(context),
                               ),
                               DocumentContentWidget(
                                 isFullContentLoaded: state.isFullContentLoaded,
@@ -211,7 +238,8 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
                           CustomScrollView(
                             slivers: [
                               SliverOverlapInjector(
-                                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                                handle: NestedScrollView
+                                    .sliverOverlapAbsorberHandleFor(context),
                               ),
                               DocumentMetaDataWidget(
                                 document: state.document,
@@ -223,7 +251,8 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
                             controller: _pagingScrollController,
                             slivers: [
                               SliverOverlapInjector(
-                                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                                handle: NestedScrollView
+                                    .sliverOverlapAbsorberHandleFor(context),
                               ),
                               SimilarDocumentsView(
                                 pagingScrollController: _pagingScrollController,
@@ -235,7 +264,8 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
                               controller: _pagingScrollController,
                               slivers: [
                                 SliverOverlapInjector(
-                                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                                  handle: NestedScrollView
+                                      .sliverOverlapAbsorberHandleFor(context),
                                 ),
                                 DocumentPermissionsWidget(
                                   document: state.document,
@@ -289,15 +319,16 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
               final isConnected = connectivityState.isConnected;
 
               final canDelete = isConnected &&
-                  LocalUserAccount.current.paperlessUser
-                      .hasPermission(PermissionAction.delete, PermissionTarget.document);
+                  LocalUserAccount.current.paperlessUser.hasPermission(
+                      PermissionAction.delete, PermissionTarget.document);
               return Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   IconButton(
                     tooltip: S.of(context)!.deleteDocumentTooltip,
                     icon: const Icon(Icons.delete),
-                    onPressed: canDelete ? () => _onDelete(state.document) : null,
+                    onPressed:
+                        canDelete ? () => _onDelete(state.document) : null,
                   ).paddedSymmetrically(horizontal: 4),
                   DocumentDownloadButton(
                     document: state.document,
@@ -307,7 +338,8 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
                   IconButton(
                     tooltip: S.of(context)!.previewTooltip,
                     icon: const Icon(Icons.visibility),
-                    onPressed: (isConnected) ? () => _onOpen(state.document) : null,
+                    onPressed:
+                        (isConnected) ? () => _onOpen(state.document) : null,
                   ).paddedOnly(right: 4.0),
                   IconButton(
                     tooltip: S.of(context)!.openInSystemViewer,
@@ -317,7 +349,8 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
                   DocumentShareButton(document: state.document),
                   IconButton(
                     tooltip: S.of(context)!.print, //TODO: INTL
-                    onPressed: () => context.read<DocumentDetailsCubit>().printDocument(),
+                    onPressed: () =>
+                        context.read<DocumentDetailsCubit>().printDocument(),
                     icon: const Icon(Icons.print),
                   ),
                 ],
@@ -350,7 +383,8 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
               ),
             ],
             child: BlocListener<DocumentEditCubit, DocumentEditState>(
-              listenWhen: (previous, current) => previous.document != current.document,
+              listenWhen: (previous, current) =>
+                  previous.document != current.document,
               listener: (context, state) {
                 cubit.replace(state.document);
               },
@@ -370,7 +404,8 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
   }
 
   void _onOpenFileInSystemViewer() async {
-    final status = await context.read<DocumentDetailsCubit>().openDocumentInSystemViewer();
+    final status =
+        await context.read<DocumentDetailsCubit>().openDocumentInSystemViewer();
     if (status == ResultType.done) return;
     if (status == ResultType.noAppToOpen) {
       showGenericError(context, S.of(context)!.noAppToDisplayPDFFilesFound);
@@ -379,14 +414,16 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
       showGenericError(context, translateError(context, ErrorCode.unknown));
     }
     if (status == ResultType.permissionDenied) {
-      showGenericError(context, S.of(context)!.couldNotOpenFilePermissionDenied);
+      showGenericError(
+          context, S.of(context)!.couldNotOpenFilePermissionDenied);
     }
   }
 
   void _onDelete(DocumentModel document) async {
     final delete = await showDialog(
           context: context,
-          builder: (context) => DeleteDocumentConfirmationDialog(document: document),
+          builder: (context) =>
+              DeleteDocumentConfirmationDialog(document: document),
         ) ??
         false;
     if (delete) {
@@ -406,7 +443,8 @@ class _DocumentDetailsPageState extends State<DocumentDetailsPage> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => DocumentView(
-          documentBytes: context.read<PaperlessDocumentsApi>().download(document),
+          documentBytes:
+              context.read<PaperlessDocumentsApi>().download(document),
           title: document.title,
         ),
       ),

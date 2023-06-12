@@ -27,6 +27,9 @@ class LocalUserAccount extends HiveObject {
     required this.paperlessUser,
   });
 
-  static LocalUserAccount get current => Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount)
-      .get(Hive.box<GlobalSettings>(HiveBoxes.globalSettings).getValue()!.currentLoggedInUser)!;
+  static LocalUserAccount get current =>
+      Hive.box<LocalUserAccount>(HiveBoxes.localUserAccount).get(
+          Hive.box<GlobalSettings>(HiveBoxes.globalSettings)
+              .getValue()!
+              .currentLoggedInUser)!;
 }

@@ -67,7 +67,8 @@ class _ServerAddressFormFieldState extends State<ServerAddressFormField> {
                 .where((element) => element.contains(textEditingValue.text));
           },
           onSelected: (option) => _formatInput(),
-          fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted) {
+          fieldViewBuilder:
+              (context, textEditingController, focusNode, onFieldSubmitted) {
             return TextField(
               controller: textEditingController,
               focusNode: focusNode,
@@ -146,9 +147,11 @@ class _AutocompleteOptions extends StatelessWidget {
                   onSelected(option);
                 },
                 child: Builder(builder: (BuildContext context) {
-                  final bool highlight = AutocompleteHighlightedOption.of(context) == index;
+                  final bool highlight =
+                      AutocompleteHighlightedOption.of(context) == index;
                   if (highlight) {
-                    SchedulerBinding.instance.addPostFrameCallback((Duration timeStamp) {
+                    SchedulerBinding.instance
+                        .addPostFrameCallback((Duration timeStamp) {
                       Scrollable.ensureVisible(context, alignment: 0.5);
                     });
                   }

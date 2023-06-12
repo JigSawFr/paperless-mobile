@@ -1,0 +1,3 @@
+* Beheben von Fehler durch welchen Korrespondenten und Dokumenttypen nicht korrekt synchronisiert wurden
+* Beheben von Fehler, durch welchen gespeicherte Ansichten nicht korrekt geladen wurden
+* Kleinere Änderungen und Bugfixes

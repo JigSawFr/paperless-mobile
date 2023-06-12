@@ -95,7 +95,8 @@ class AppDrawer extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (_) => MultiProvider(
                     providers: [
-                      Provider.value(value: context.read<PaperlessServerStatsApi>()),
+                      Provider.value(
+                          value: context.read<PaperlessServerStatsApi>()),
                       Provider.value(value: context.read<ApiVersion>()),
                     ],
                     child: const SettingsPage(),
@@ -128,7 +129,8 @@ class AppDrawer extends StatelessWidget {
         ),
         RichText(
           text: TextSpan(
-            style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface),
+            style: theme.textTheme.bodyMedium
+                ?.copyWith(color: colorScheme.onSurface),
             children: [
               TextSpan(
                 text: S.of(context)!.findTheSourceCodeOn,
@@ -151,11 +153,13 @@ class AppDrawer extends StatelessWidget {
         const SizedBox(height: 16),
         Text(
           'Credits',
-          style: theme.textTheme.titleMedium?.copyWith(color: colorScheme.onSurface),
+          style: theme.textTheme.titleMedium
+              ?.copyWith(color: colorScheme.onSurface),
         ),
         RichText(
           text: TextSpan(
-            style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface),
+            style: theme.textTheme.bodyMedium
+                ?.copyWith(color: colorScheme.onSurface),
             children: [
               const TextSpan(
                 text: 'Onboarding images by ',
@@ -205,16 +209,16 @@ class AppDrawer extends StatelessWidget {
 }
 
 //Wrap(
-      //   children: [
-      //     const Text('Onboarding images by '),
-      //     GestureDetector(
-      //       onTap: followLink,
-      //       child: RichText(
-              
-      //         'pch.vector',
-      //         style: TextStyle(color: Colors.blue),
-      //       ),
-      //     ),
-      //     const Text(' on Freepik.')
-      //   ],
-      // )
+//   children: [
+//     const Text('Onboarding images by '),
+//     GestureDetector(
+//       onTap: followLink,
+//       child: RichText(
+
+//         'pch.vector',
+//         style: TextStyle(color: Colors.blue),
+//       ),
+//     ),
+//     const Text(' on Freepik.')
+//   ],
+// )

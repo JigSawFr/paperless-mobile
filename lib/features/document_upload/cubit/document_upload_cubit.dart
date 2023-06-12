@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:paperless_api/paperless_api.dart';
+import 'package:paperless_mobile/core/bloc/connectivity_cubit.dart';
 import 'package:paperless_mobile/core/repository/label_repository.dart';
 
 part 'document_upload_state.dart';
@@ -12,9 +14,13 @@ class DocumentUploadCubit extends Cubit<DocumentUploadState> {
   final PaperlessDocumentsApi _documentApi;
 
   final LabelRepository _labelRepository;
+  final Connectivity _connectivity;
 
-  DocumentUploadCubit(this._labelRepository, this._documentApi)
-      : super(const DocumentUploadState()) {
+  DocumentUploadCubit(
+    this._labelRepository,
+    this._documentApi,
+    this._connectivity,
+  ) : super(const DocumentUploadState()) {
     _labelRepository.addListener(
       this,
       onChanged: (labels) {
@@ -31,6 +37,7 @@ class DocumentUploadCubit extends Cubit<DocumentUploadState> {
     Uint8List bytes, {
     required String filename,
     required String title,
+    required String userId,
     int? documentType,
     int? correspondent,
     Iterable<int> tags = const [],

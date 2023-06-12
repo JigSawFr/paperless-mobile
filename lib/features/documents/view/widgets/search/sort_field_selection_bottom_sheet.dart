@@ -27,10 +27,12 @@ class SortFieldSelectionBottomSheet extends StatefulWidget {
   });
 
   @override
-  State<SortFieldSelectionBottomSheet> createState() => _SortFieldSelectionBottomSheetState();
+  State<SortFieldSelectionBottomSheet> createState() =>
+      _SortFieldSelectionBottomSheetState();
 }
 
-class _SortFieldSelectionBottomSheetState extends State<SortFieldSelectionBottomSheet> {
+class _SortFieldSelectionBottomSheetState
+    extends State<SortFieldSelectionBottomSheet> {
   late SortField? _currentSortField;
   late SortOrder _currentSortOrder;
 

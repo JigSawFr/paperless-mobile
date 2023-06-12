@@ -25,15 +25,18 @@ class DefaultDownloadFileTypeSetting extends StatelessWidget {
                   options: [
                     RadioOption(
                       value: FileDownloadType.alwaysAsk,
-                      label: _downloadFileTypeToString(context, FileDownloadType.alwaysAsk),
+                      label: _downloadFileTypeToString(
+                          context, FileDownloadType.alwaysAsk),
                     ),
                     RadioOption(
                       value: FileDownloadType.original,
-                      label: _downloadFileTypeToString(context, FileDownloadType.original),
+                      label: _downloadFileTypeToString(
+                          context, FileDownloadType.original),
                     ),
                     RadioOption(
                       value: FileDownloadType.archived,
-                      label: _downloadFileTypeToString(context, FileDownloadType.archived),
+                      label: _downloadFileTypeToString(
+                          context, FileDownloadType.archived),
                     ),
                   ],
                   initialValue: settings.defaultDownloadType,
@@ -51,7 +54,8 @@ class DefaultDownloadFileTypeSetting extends StatelessWidget {
     );
   }
 
-  String _downloadFileTypeToString(BuildContext context, FileDownloadType type) {
+  String _downloadFileTypeToString(
+      BuildContext context, FileDownloadType type) {
     switch (type) {
       case FileDownloadType.original:
         return S.of(context)!.original;

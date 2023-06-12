@@ -20,8 +20,10 @@ class EditCorrespondentPage extends StatelessWidget {
         return EditLabelPage<Correspondent>(
           label: correspondent,
           fromJsonT: Correspondent.fromJson,
-          onSubmit: (context, label) => context.read<EditLabelCubit>().replaceCorrespondent(label),
-          onDelete: (context, label) => context.read<EditLabelCubit>().removeCorrespondent(label),
+          onSubmit: (context, label) =>
+              context.read<EditLabelCubit>().replaceCorrespondent(label),
+          onDelete: (context, label) =>
+              context.read<EditLabelCubit>().removeCorrespondent(label),
           canDelete: LocalUserAccount.current.paperlessUser.hasPermission(
             PermissionAction.delete,
             PermissionTarget.correspondent,

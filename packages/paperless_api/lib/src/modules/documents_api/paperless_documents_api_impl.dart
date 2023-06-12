@@ -52,6 +52,9 @@ class PaperlessDocumentsApiImpl implements PaperlessDocumentsApi {
       final response = await client.post(
         '/api/documents/post_document/',
         data: formData,
+        onSendProgress: (count, total) {
+          debugPrint("Uploading ${(count / total) * 100}%...");
+        },
       );
       if (response.statusCode == 200) {
         if (response.data is String && response.data != "OK") {

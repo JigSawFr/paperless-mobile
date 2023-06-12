@@ -30,7 +30,9 @@ class VerifyIdentityPage extends StatelessWidget {
             return Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(S.of(context)!.useTheConfiguredBiometricFactorToAuthenticate)
+                Text(S
+                        .of(context)!
+                        .useTheConfiguredBiometricFactorToAuthenticate)
                     .paddedSymmetrically(horizontal: 16),
                 const Icon(
                   Icons.fingerprint,
@@ -52,7 +54,9 @@ class VerifyIdentityPage extends StatelessWidget {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () => context.read<AuthenticationCubit>().restoreSessionState(),
+                      onPressed: () => context
+                          .read<AuthenticationCubit>()
+                          .restoreSessionState(),
                       child: Text(S.of(context)!.verifyIdentity),
                     ),
                   ],

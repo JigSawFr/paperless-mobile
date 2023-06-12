@@ -35,8 +35,10 @@ class _SimilarDocumentsViewState extends State<SimilarDocumentsView>
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ConnectivityCubit, ConnectivityState>(
-      listenWhen: (previous, current) => !previous.isConnected && current.isConnected,
-      listener: (context, state) => context.read<SimilarDocumentsCubit>().initialize(),
+      listenWhen: (previous, current) =>
+          !previous.isConnected && current.isConnected,
+      listener: (context, state) =>
+          context.read<SimilarDocumentsCubit>().initialize(),
       builder: (context, connectivity) {
         return BlocBuilder<SimilarDocumentsCubit, SimilarDocumentsState>(
           builder: (context, state) {
@@ -45,7 +47,9 @@ class _SimilarDocumentsViewState extends State<SimilarDocumentsView>
                 child: OfflineWidget(),
               );
             }
-            if (state.hasLoaded && !state.isLoading && state.documents.isEmpty) {
+            if (state.hasLoaded &&
+                !state.isLoading &&
+                state.documents.isEmpty) {
               return SliverToBoxAdapter(
                 child: Center(
                   child: Text(S.of(context)!.noItemsFound),
