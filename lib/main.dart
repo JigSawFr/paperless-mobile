@@ -14,6 +14,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl_standalone.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:mock_server/mock_server.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:paperless_api/paperless_api.dart';
 import 'package:paperless_mobile/constants.dart';
@@ -22,6 +23,7 @@ import 'package:paperless_mobile/core/config/hive/hive_config.dart';
 import 'package:paperless_mobile/core/database/tables/global_settings.dart';
 import 'package:paperless_mobile/core/database/tables/local_user_account.dart';
 import 'package:paperless_mobile/core/database/tables/local_user_app_state.dart';
+import 'package:paperless_mobile/core/exception/server_message_exception.dart';
 import 'package:paperless_mobile/core/factory/paperless_api_factory.dart';
 import 'package:paperless_mobile/core/factory/paperless_api_factory_impl.dart';
 import 'package:paperless_mobile/core/interceptor/dio_http_error_interceptor.dart';
@@ -41,14 +43,11 @@ import 'package:paperless_mobile/features/login/view/login_page.dart';
 import 'package:paperless_mobile/features/notifications/services/local_notification_service.dart';
 import 'package:paperless_mobile/features/settings/view/pages/switching_accounts_page.dart';
 import 'package:paperless_mobile/features/settings/view/widgets/global_settings_builder.dart';
-import 'package:paperless_mobile/features/sharing/share_intent_queue.dart';
 import 'package:paperless_mobile/generated/l10n/app_localizations.dart';
 import 'package:paperless_mobile/helpers/message_helpers.dart';
 import 'package:paperless_mobile/theme.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:mock_server/mock_server.dart';
 
 String get defaultPreferredLocaleSubtag {
   String preferredLocale = Platform.localeName.split("_").first;
@@ -77,95 +76,112 @@ Future<void> _initHive() async {
 }
 
 void main() async {
-  Paint.enableDithering = true;
-  if (kDebugMode) {
-    // URL: http://localhost:3131
-    // Login: admin:test
-    await LocalMockApiServer(
-            // RandomDelayGenerator(
-            //   const Duration(milliseconds: 100),
-            //   const Duration(milliseconds: 800),
-            // ),
-            )
-        .start();
-  }
-  await _initHive();
-  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  final globalSettingsBox = Hive.box<GlobalSettings>(HiveBoxes.globalSettings);
-  final globalSettings = globalSettingsBox.getValue()!;
+  runZonedGuarded(() async {
+    Paint.enableDithering = true;
+    if (kDebugMode) {
+      // URL: http://localhost:3131
+      // Login: admin:test
+      await LocalMockApiServer(
+              // RandomDelayGenerator(
+              //   const Duration(milliseconds: 100),
+              //   const Duration(milliseconds: 800),
+              // ),
+              )
+          .start();
+    }
+    await _initHive();
+    final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+    final globalSettingsBox =
+        Hive.box<GlobalSettings>(HiveBoxes.globalSettings);
+    final globalSettings = globalSettingsBox.getValue()!;
 
-  await findSystemLocale();
-  packageInfo = await PackageInfo.fromPlatform();
-  if (Platform.isAndroid) {
-    androidInfo = await DeviceInfoPlugin().androidInfo;
-  }
-  if (Platform.isIOS) {
-    iosInfo = await DeviceInfoPlugin().iosInfo;
-  }
+    await findSystemLocale();
+    packageInfo = await PackageInfo.fromPlatform();
+    if (Platform.isAndroid) {
+      androidInfo = await DeviceInfoPlugin().androidInfo;
+    }
+    if (Platform.isIOS) {
+      iosInfo = await DeviceInfoPlugin().iosInfo;
+    }
 
-  final connectivity = Connectivity();
-  final localAuthentication = LocalAuthentication();
-  final connectivityStatusService = ConnectivityStatusServiceImpl(connectivity);
-  final localAuthService = LocalAuthenticationService(localAuthentication);
+    final connectivity = Connectivity();
+    final localAuthentication = LocalAuthentication();
+    final connectivityStatusService =
+        ConnectivityStatusServiceImpl(connectivity);
+    final localAuthService = LocalAuthenticationService(localAuthentication);
 
-  HydratedBloc.storage = await HydratedStorage.build(
-    storageDirectory: await getApplicationDocumentsDirectory(),
-  );
+    HydratedBloc.storage = await HydratedStorage.build(
+      storageDirectory: await getApplicationDocumentsDirectory(),
+    );
 
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+    FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  final languageHeaderInterceptor = LanguageHeaderInterceptor(
-    globalSettings.preferredLocaleSubtag,
-  );
-  // Manages security context, required for self signed client certificates
-  final sessionManager = SessionManager([
-    DioHttpErrorInterceptor(),
-    languageHeaderInterceptor,
-  ]);
+    final languageHeaderInterceptor = LanguageHeaderInterceptor(
+      globalSettings.preferredLocaleSubtag,
+    );
+    // Manages security context, required for self signed client certificates
+    final sessionManager = SessionManager([
+      languageHeaderInterceptor,
+    ]);
 
-  // Initialize Blocs/Cubits
-  final connectivityCubit = ConnectivityCubit(connectivityStatusService);
+    // Initialize Blocs/Cubits
+    final connectivityCubit = ConnectivityCubit(connectivityStatusService);
 
-  // Load application settings and stored authentication data
-  await connectivityCubit.initialize();
+    // Load application settings and stored authentication data
+    await connectivityCubit.initialize();
 
-  final localNotificationService = LocalNotificationService();
-  await localNotificationService.initialize();
+    final localNotificationService = LocalNotificationService();
+    await localNotificationService.initialize();
 
-  //Update language header in interceptor on language change.
-  globalSettingsBox.listenable().addListener(() {
-    languageHeaderInterceptor.preferredLocaleSubtag =
-        globalSettings.preferredLocaleSubtag;
-  });
+    //Update language header in interceptor on language change.
+    globalSettingsBox.listenable().addListener(() {
+      languageHeaderInterceptor.preferredLocaleSubtag =
+          globalSettings.preferredLocaleSubtag;
+    });
 
-  final apiFactory = PaperlessApiFactoryImpl(sessionManager);
+    final apiFactory = PaperlessApiFactoryImpl(sessionManager);
 
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(value: sessionManager),
-        Provider<LocalAuthenticationService>.value(value: localAuthService),
-        Provider<Connectivity>.value(value: connectivity),
-        Provider<ConnectivityStatusService>.value(
-            value: connectivityStatusService),
-        Provider<LocalNotificationService>.value(
-            value: localNotificationService),
-        Provider.value(value: DocumentChangedNotifier()),
-      ],
-      child: MultiBlocProvider(
+    runApp(
+      MultiProvider(
         providers: [
-          BlocProvider<ConnectivityCubit>.value(value: connectivityCubit),
-          BlocProvider(
-            create: (context) => AuthenticationCubit(
-                localAuthService, apiFactory, sessionManager),
-          )
+          ChangeNotifierProvider.value(value: sessionManager),
+          Provider<LocalAuthenticationService>.value(value: localAuthService),
+          Provider<Connectivity>.value(value: connectivity),
+          Provider<ConnectivityStatusService>.value(
+              value: connectivityStatusService),
+          Provider<LocalNotificationService>.value(
+              value: localNotificationService),
+          Provider.value(value: DocumentChangedNotifier()),
         ],
-        child: PaperlessMobileEntrypoint(
-          paperlessProviderFactory: apiFactory,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<ConnectivityCubit>.value(value: connectivityCubit),
+            BlocProvider(
+              create: (context) => AuthenticationCubit(
+                  localAuthService, apiFactory, sessionManager),
+            ),
+          ],
+          child: PaperlessMobileEntrypoint(
+            paperlessProviderFactory: apiFactory,
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }, (error, stack) {
+    String message = switch (error) {
+      PaperlessServerException e => e.details ?? error.toString(),
+      ServerMessageException e => e.message,
+      _ => error.toString()
+    };
+    debugPrint("An unepxected exception has occured!");
+    debugPrint(message);
+    debugPrintStack(stackTrace: stack);
+    // if (_rootScaffoldKey.currentContext != null) {
+    //   ScaffoldMessenger.maybeOf(_rootScaffoldKey.currentContext!)
+    //     ?..hideCurrentSnackBar()
+    //     ..showSnackBar(SnackBar(content: Text(message)));
+    // }
+  });
 }
 
 class PaperlessMobileEntrypoint extends StatefulWidget {

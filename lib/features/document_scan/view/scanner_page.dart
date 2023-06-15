@@ -254,6 +254,9 @@ class _ScannerPageState extends State<ScannerPage>
   void _onPrepareDocumentUpload(BuildContext context) async {
     final file = await _assembleFileBytes(
       context.read<DocumentScannerCubit>().state,
+      forcePdf: Hive.box<GlobalSettings>(HiveBoxes.globalSettings)
+          .getValue()!
+          .enforceSinglePagePdfUpload,
     );
     final uploadResult = await pushDocumentUploadPreparationPage(
       context,

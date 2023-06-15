@@ -19,11 +19,15 @@ class DioHttpErrorInterceptor extends Interceptor {
     } else if (err.response?.statusCode == 403) {
       var data = err.response!.data;
       if (data is Map && data.containsKey("detail")) {
-        handler.reject(DioError(
-          requestOptions: err.requestOptions,
-          error: ServerMessageException(data['detail']),
-          response: err.response,
-        ));
+        handler.reject(
+          DioError(
+            message: data['detail'],
+            requestOptions: err.requestOptions,
+            error: ServerMessageException(data['detail']),
+            response: err.response,
+            type: DioErrorType.unknown,
+          ),
+        );
         return;
       }
     } else if (err.error is SocketException) {
@@ -31,6 +35,7 @@ class DioHttpErrorInterceptor extends Interceptor {
       if (ex.osError?.errorCode == _OsErrorCodes.serverUnreachable.code) {
         return handler.reject(
           DioError(
+            message: "The server could not be reached. Is the device offline?",
             error: const PaperlessServerException(ErrorCode.deviceOffline),
             requestOptions: err.requestOptions,
             type: DioErrorType.connectionTimeout,

@@ -47,7 +47,7 @@
   "@authenticateOnAppStart": {
     "description": "Description of the biometric authentication settings tile"
   },
-  "biometricAuthentication": "Biometrische Authentifizierung aktivieren",
+  "biometricAuthentication": "Biometrische Authentifizierung",
   "@biometricAuthentication": {},
   "authenticateToToggleBiometricAuthentication": "{mode, select, enable{Authentifizieren, um die biometrische Authentifizierung zu aktivieren} disable{Authentifizieren, um die biometrische Authentifizierung zu deaktivieren}  other{}}",
   "@authenticateToToggleBiometricAuthentication": {
@@ -824,5 +824,37 @@
   "@exportScansToPdf": {
     "description": "title of the alert dialog when exporting scans to pdf"
   },
-  "allScansWillBeMerged": "Alle Scans werden in eine einzige PDF-Datei zusammengeführt."
+  "allScansWillBeMerged": "Alle Scans werden in eine einzige PDF-Datei zusammengeführt.",
+  "behavior": "Verhalten",
+  "@behavior": {
+    "description": "Title of the settings concerning app beahvior"
+  },
+  "theme": "Erscheinungsbild",
+  "@theme": {
+    "description": "Title of the theme mode setting"
+  },
+  "clearCache": "Cache leeren",
+  "@clearCache": {
+    "description": "Title of the clear cache setting"
+  },
+  "freeBytes": "{bytes} freigeben",
+  "@freeBytes": {
+    "description": "Text shown for clear storage settings"
+  },
+  "calculatingDots": "Berechne...",
+  "@calculatingDots": {
+    "description": "Text shown when the byte size is still being calculated"
+  },
+  "freedDiskSpace": "{bytes} erfolgreich freigegeben.",
+  "@freedDiskSpace": {
+    "description": "Message shown after clearing storage"
+  },
+  "uploadScansAsPdf": "Scans als PDF hochladen",
+  "@uploadScansAsPdf": {
+    "description": "Title of the setting which toggles whether scans are always uploaded as pdf"
+  },
+  "convertSinglePageScanToPdf": "Einseitige Scans vor dem Hochladen immer in PDF umwandeln",
+  "@convertSinglePageScanToPdf": {
+    "description": "description of the upload scans as pdf setting"
+  }
 }

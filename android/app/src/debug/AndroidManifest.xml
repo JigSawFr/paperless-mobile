@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.paperless_mobile">
+    package="de.astubenbord.paperless_mobile">
     <application 
         android:requestLegacyExternalStorage="true"/>
     <!-- Flutter needs it to communicate with the running application

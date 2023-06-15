@@ -29,6 +29,9 @@ class GlobalSettings with HiveObjectMixin {
   @HiveField(6)
   FileDownloadType defaultShareType;
 
+  @HiveField(7, defaultValue: false)
+  bool enforceSinglePagePdfUpload;
+
   GlobalSettings({
     required this.preferredLocaleSubtag,
     this.preferredThemeMode = ThemeMode.system,
@@ -37,5 +40,6 @@ class GlobalSettings with HiveObjectMixin {
     this.currentLoggedInUser,
     this.defaultDownloadType = FileDownloadType.alwaysAsk,
     this.defaultShareType = FileDownloadType.alwaysAsk,
+    this.enforceSinglePagePdfUpload = false,
   });
 }

@@ -11,7 +11,7 @@ class ThemeModeSetting extends StatelessWidget {
     return GlobalSettingsBuilder(
       builder: (context, settings) {
         return ListTile(
-          title: Text(S.of(context)!.appearance),
+          title: Text(S.of(context)!.theme),
           subtitle: Text(_mapThemeModeToLocalizedString(
               settings.preferredThemeMode, context)),
           onTap: () => showDialog<ThemeMode>(

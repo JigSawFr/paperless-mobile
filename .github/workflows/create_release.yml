@@ -1,0 +1,78 @@
+## See https://github.com/flutter/gallery/blob/main/.github/workflows/release_deploy_play_store.yml
+
+name: Create new release
+on:
+  # Enable manual run
+  workflow_dispatch:
+    inputs:
+      track:
+        description: "Google Play Track"
+        type: choice
+        default: beta
+        options: 
+          - internal
+          - alpha
+          - beta
+          - production
+
+      is_draft:
+        description: "Mark as draft"
+        required: true
+        default: true
+        type: boolean
+
+# Declare default permissions as read only.
+permissions: read-all
+
+jobs:
+  fastlane-publish-release:
+    name: "Deploy to Stores and create GitHub release"
+    runs-on: ubuntu-latest
+    steps:
+
+                    
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >>$GITHUB_OUTPUT
+        id: extract_branch
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Clone flutter repository
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.10.0'
+          channel: stable
+      - run: flutter doctor -v
+
+      - name: Setup signing config
+        uses: ./.github/actions/setup-android-signing-config
+        with:
+          keystore-key-alias: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+          keystore-key-password: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
+          keystore-store-password: ${{ secrets.KEYSTORE_STORE_PASSWORD }}
+          release-keystore: ${{ secrets.RELEASE_KEYSTORE }}
+          release-keystore-passphrase: ${{ secrets.RELEASE_KEYSTORE_PASSPHRASE }}
+
+      - name: Get packages and run codegen
+        run: |
+          bash install_dependencies.sh
+        working-directory: scripts
+
+      - name: Setup Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "2.6"
+          bundler-cache: true
+          working-directory: android
+      
+      - name: Build and publish artifacts
+        run: |
+            bundle exec fastlane publish_in_play_store track:${{ github.event.inputs.track }} is_draft:${{ github.event.inputs.is_draft }} 
+            bundle exec fastlane github branch:${{ steps.extract_branch.outputs.branch }} is_draft:${{ github.event.inputs.is_draft }}
+        env:
+          PLAY_STORE_CREDENTIALS: ${{ secrets.PLAY_STORE_CREDENTIALS }}
+          GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
+        working-directory: android
+  

@@ -1,0 +1,3 @@
+* Support for monochromatic icons on Android 12+
+* New setting to allow single paged scans to be uploaded as PDF
+* Restructured settings page

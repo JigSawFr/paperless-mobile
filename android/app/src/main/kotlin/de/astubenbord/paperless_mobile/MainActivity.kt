@@ -1,4 +1,4 @@
-package com.example.paperless_mobile
+package de.astubenbord.paperless_mobile
 
 import android.os.Bundle
 import android.view.WindowManager.LayoutParams

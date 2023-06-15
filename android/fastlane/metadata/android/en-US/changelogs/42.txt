@@ -1,0 +1,1 @@
+* Fixed a bug which caused documents to not be loaded

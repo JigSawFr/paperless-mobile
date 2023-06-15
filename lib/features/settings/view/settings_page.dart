@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:paperless_api/paperless_api.dart';
-import 'package:paperless_mobile/features/settings/view/pages/application_settings_page.dart';
-import 'package:paperless_mobile/features/settings/view/pages/security_settings_page.dart';
+import 'package:paperless_mobile/features/settings/view/widgets/biometric_authentication_setting.dart';
+import 'package:paperless_mobile/features/settings/view/widgets/clear_storage_settings.dart';
+import 'package:paperless_mobile/features/settings/view/widgets/color_scheme_option_setting.dart';
+import 'package:paperless_mobile/features/settings/view/widgets/default_download_file_type_setting.dart';
+import 'package:paperless_mobile/features/settings/view/widgets/default_share_file_type_setting.dart';
+import 'package:paperless_mobile/features/settings/view/widgets/enforce_pdf_upload_setting.dart';
+import 'package:paperless_mobile/features/settings/view/widgets/language_selection_setting.dart';
+import 'package:paperless_mobile/features/settings/view/widgets/theme_mode_setting.dart';
 import 'package:paperless_mobile/features/settings/view/widgets/user_settings_builder.dart';
 import 'package:paperless_mobile/generated/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +20,22 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context)!.settings),
+      ),
+      body: ListView(
+        children: [
+          _buildSectionHeader(context, S.of(context)!.appearance),
+          const LanguageSelectionSetting(),
+          const ThemeModeSetting(),
+          const ColorSchemeOptionSetting(),
+          _buildSectionHeader(context, S.of(context)!.security),
+          const BiometricAuthenticationSetting(),
+          _buildSectionHeader(context, S.of(context)!.behavior),
+          const DefaultDownloadFileTypeSetting(),
+          const DefaultShareFileTypeSetting(),
+          const EnforcePdfUploadSetting(),
+          _buildSectionHeader(context, S.of(context)!.storage),
+          const ClearCacheSetting(),
+        ],
       ),
       bottomNavigationBar: UserAccountBuilder(
         builder: (context, user) {
@@ -63,28 +85,18 @@ class SettingsPage extends StatelessWidget {
           );
         },
       ),
-      body: ListView(
-        children: [
-          ListTile(
-            // leading: const Icon(Icons.style_outlined),
-            title: Text(S.of(context)!.applicationSettings),
-            subtitle: Text(S.of(context)!.languageAndVisualAppearance),
-            onTap: () => _goto(const ApplicationSettingsPage(), context),
-          ),
-          ListTile(
-            // leading: const Icon(Icons.security_outlined),
-            title: Text(S.of(context)!.security),
-            subtitle: Text(S.of(context)!.biometricAuthentication),
-            onTap: () => _goto(const SecuritySettingsPage(), context),
-          ),
-          // ListTile(
-          //   // leading: const Icon(Icons.storage_outlined),
-          //   title: Text(S.of(context)!.storage),
-          //   subtitle:
-          //       Text(S.of(context)!.mangeFilesAndStorageSpace),
-          //   onTap: () => _goto(const StorageSettingsPage(), context),
-          // ),
-        ],
+    );
+  }
+
+  Widget _buildSectionHeader(BuildContext context, String text) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, top: 16),
+      child: Text(
+        text,
+        style: Theme.of(context)
+            .textTheme
+            .labelLarge
+            ?.copyWith(color: Theme.of(context).colorScheme.primary),
       ),
     );
   }

@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:paperless_api/paperless_api.dart';
 import 'package:paperless_mobile/core/config/hive/hive_config.dart';
 import 'package:paperless_mobile/core/database/tables/local_user_account.dart';
+import 'package:paperless_mobile/core/exception/server_message_exception.dart';
 import 'package:paperless_mobile/features/login/cubit/authentication_cubit.dart';
 import 'package:paperless_mobile/features/login/model/client_certificate.dart';
 import 'package:paperless_mobile/features/login/model/client_certificate_form_model.dart';
@@ -147,7 +149,11 @@ class _LoginPageState extends State<LoginPage> {
           form[ServerAddressFormField.fkServerAddress],
           clientCert,
         );
-      } on Exception catch (error) {
+      } on PaperlessServerException catch (error) {
+        showErrorMessage(context, error);
+      } on ServerMessageException catch (error) {
+        showLocalizedError(context, error.message);
+      } catch (error) {
         showGenericError(context, error);
       }
     }

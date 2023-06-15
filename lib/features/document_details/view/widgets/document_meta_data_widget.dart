@@ -55,6 +55,12 @@ class _DocumentMetaDataWidgetState extends State<DocumentMetaDataWidget> {
                 context: context,
                 label: S.of(context)!.mediaFilename,
               ).paddedOnly(bottom: widget.itemSpacing),
+              if (state.document.originalFileName != null)
+                DetailsItem.text(
+                  state.document.originalFileName!,
+                  context: context,
+                  label: S.of(context)!.originalMD5Checksum,
+                ).paddedOnly(bottom: widget.itemSpacing),
               DetailsItem.text(
                 state.metaData!.originalChecksum,
                 context: context,

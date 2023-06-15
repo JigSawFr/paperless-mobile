@@ -36,7 +36,7 @@ class DocumentModel extends Equatable {
   final DateTime modified;
   final DateTime added;
   final int? archiveSerialNumber;
-  final String originalFileName;
+  final String? originalFileName;
   final String? archivedFileName;
 
   @JsonKey(
@@ -62,7 +62,7 @@ class DocumentModel extends Equatable {
     required this.modified,
     required this.added,
     this.archiveSerialNumber,
-    required this.originalFileName,
+    this.originalFileName,
     this.archivedFileName,
     this.storagePath,
     this.searchHit,

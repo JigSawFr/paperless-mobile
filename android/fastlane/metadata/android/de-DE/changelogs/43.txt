@@ -1,0 +1,3 @@
+* Unterstützung für monochrome icons auf Android 12+
+* Neue Einstellung, welche es erlaubt, auch einseitige Scans immer als PDF hochzuladen
+* Umstrukturierung der Einstellungs-Seite

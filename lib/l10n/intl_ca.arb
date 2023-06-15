@@ -816,13 +816,45 @@
   "@export": {
     "description": "Label for button that exports scanned images to pdf (before upload)"
   },
-  "invalidFilenameCharacter": "Invalid character(s) found in filename: {characters}",
+  "invalidFilenameCharacter": "Caràcter(s) invàlids trobats a nom d'arxiu: {characters}",
   "@invalidFilenameCharacter": {
     "description": "For validating filename in export dialogue"
   },
-  "exportScansToPdf": "Export scans to PDF",
+  "exportScansToPdf": "Exporta escanejos a PDF",
   "@exportScansToPdf": {
     "description": "title of the alert dialog when exporting scans to pdf"
   },
-  "allScansWillBeMerged": "All scans will be merged into a single PDF file."
+  "allScansWillBeMerged": "Els escanejos s'uniran en un únic document PDF.",
+  "behavior": "Behavior",
+  "@behavior": {
+    "description": "Title of the settings concerning app beahvior"
+  },
+  "theme": "Theme",
+  "@theme": {
+    "description": "Title of the theme mode setting"
+  },
+  "clearCache": "Clear cache",
+  "@clearCache": {
+    "description": "Title of the clear cache setting"
+  },
+  "freeBytes": "Free {bytes}",
+  "@freeBytes": {
+    "description": "Text shown for clear storage settings"
+  },
+  "calculatingDots": "Calculating...",
+  "@calculatingDots": {
+    "description": "Text shown when the byte size is still being calculated"
+  },
+  "freedDiskSpace": "Successfully freed {bytes} of disk space.",
+  "@freedDiskSpace": {
+    "description": "Message shown after clearing storage"
+  },
+  "uploadScansAsPdf": "Upload scans as PDF",
+  "@uploadScansAsPdf": {
+    "description": "Title of the setting which toggles whether scans are always uploaded as pdf"
+  },
+  "convertSinglePageScanToPdf": "Always convert single page scans to PDF before uploading",
+  "@convertSinglePageScanToPdf": {
+    "description": "description of the upload scans as pdf setting"
+  }
 }

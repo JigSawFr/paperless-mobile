@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
+import 'package:paperless_mobile/core/interceptor/dio_http_error_interceptor.dart';
 import 'package:paperless_mobile/core/interceptor/retry_on_connection_change_interceptor.dart';
 import 'package:paperless_mobile/features/login/model/client_certificate.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -22,13 +23,14 @@ class SessionManager extends ValueNotifier<Dio> {
       BaseOptions(contentType: Headers.jsonContentType),
     );
     dio.options
-      ..receiveTimeout = const Duration(seconds: 20)
+      ..receiveTimeout = const Duration(seconds: 30)
       ..sendTimeout = const Duration(seconds: 60)
       ..responseType = ResponseType.json;
     (dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
         (client) => client..badCertificateCallback = (cert, host, port) => true;
     dio.interceptors.addAll([
       ...interceptors,
+      DioHttpErrorInterceptor(),
       PrettyDioLogger(
         compact: true,
         responseBody: false,

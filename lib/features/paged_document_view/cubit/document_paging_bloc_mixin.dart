@@ -24,11 +24,13 @@ mixin DocumentPagingBlocMixin<State extends DocumentPagingState>
     final newFilter = state.filter.copyWith(page: state.filter.page + 1);
     try {
       final result = await api.findAll(newFilter);
-      emit(state.copyWithPaged(
-        hasLoaded: true,
-        filter: newFilter,
-        value: [...state.value, result],
-      ));
+      emit(
+        state.copyWithPaged(
+          hasLoaded: true,
+          filter: newFilter,
+          value: [...state.value, result],
+        ),
+      );
     } finally {
       await onFilterUpdated(newFilter);
       emit(state.copyWithPaged(isLoading: false));
