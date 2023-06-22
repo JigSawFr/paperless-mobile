@@ -1,0 +1,7 @@
+# Ignore env files
+.env*
+# Keep the dummy file
+!.env.dummy
+
+# Ignore key files
+keys/*
