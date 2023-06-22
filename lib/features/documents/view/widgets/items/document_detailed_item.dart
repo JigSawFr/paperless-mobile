@@ -141,10 +141,10 @@ class DocumentDetailedItem extends DocumentItem {
               ],
             ).paddedLTRB(8, 0, 8, 4),
             TagsWidget(
-              isMultiLine: false,
               tags: document.tags
                   .map((e) => context.watch<LabelRepository>().state.tags[e]!)
                   .toList(),
+              onTagSelected: onTagSelected,
             ).padded(),
             if (highlights != null)
               Html(

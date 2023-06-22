@@ -6,6 +6,9 @@ class ObscuredInputTextFormField extends StatefulWidget {
   final void Function(String?) onChanged;
   final FormFieldValidator<String>? validator;
   final bool enabled;
+  final FocusNode? focusNode;
+
+  final ValueChanged<String?>? onFieldSubmitted;
 
   const ObscuredInputTextFormField({
     super.key,
@@ -14,6 +17,8 @@ class ObscuredInputTextFormField extends StatefulWidget {
     this.validator,
     this.initialValue,
     this.enabled = true,
+    this.focusNode,
+    this.onFieldSubmitted,
   });
 
   @override
@@ -24,7 +29,13 @@ class ObscuredInputTextFormField extends StatefulWidget {
 class _ObscuredInputTextFormFieldState
     extends State<ObscuredInputTextFormField> {
   bool _showPassword = false;
-  final FocusNode _passwordFocusNode = FocusNode();
+  late final FocusNode _passwordFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _passwordFocusNode = widget.focusNode ?? FocusNode();
+  }
 
   @override
   void dispose() {
@@ -37,6 +48,7 @@ class _ObscuredInputTextFormFieldState
     return TextFormField(
       enabled: widget.enabled,
       autovalidateMode: AutovalidateMode.onUserInteraction,
+      onFieldSubmitted: widget.onFieldSubmitted,
       validator: widget.validator,
       initialValue: widget.initialValue,
       focusNode: _passwordFocusNode,

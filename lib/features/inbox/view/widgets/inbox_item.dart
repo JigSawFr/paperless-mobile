@@ -213,13 +213,11 @@ class _InboxItemState extends State<InboxItem> {
                             TagsWidget(
                               tags: widget.document.tags
                                   .map((e) => state.labels.tags[e])
-                                  .whereNot((element) => element == null)
+                                  .whereNot((e) => e == null)
                                   .toList()
                                   .cast<Tag>(),
-                              isMultiLine: false,
                               isClickable: false,
                               showShortNames: true,
-                              dense: true,
                             ).paddedOnly(left: 8, bottom: 8),
                           ],
                         ),

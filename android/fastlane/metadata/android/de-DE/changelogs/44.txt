@@ -1,0 +1,3 @@
+* Filter können jetzt über einen Knopf über dem Filter Knopf zurückgesetzt werden
+* Hinzufügen eines Hinweises über die benötigten Nutzerberechtigungen auf der Login Seite
+* Kleine visuelle Änderungen

@@ -26,7 +26,6 @@ import 'package:paperless_mobile/core/database/tables/local_user_app_state.dart'
 import 'package:paperless_mobile/core/exception/server_message_exception.dart';
 import 'package:paperless_mobile/core/factory/paperless_api_factory.dart';
 import 'package:paperless_mobile/core/factory/paperless_api_factory_impl.dart';
-import 'package:paperless_mobile/core/interceptor/dio_http_error_interceptor.dart';
 import 'package:paperless_mobile/core/interceptor/language_header.interceptor.dart';
 import 'package:paperless_mobile/core/notifier/document_changed_notifier.dart';
 import 'package:paperless_mobile/core/security/session_manager.dart';

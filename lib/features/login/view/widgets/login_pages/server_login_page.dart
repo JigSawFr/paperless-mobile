@@ -9,6 +9,7 @@ class ServerLoginPage extends StatefulWidget {
   final String submitText;
   final Future<void> Function() onSubmit;
   final GlobalKey<FormBuilderState> formBuilderKey;
+
   const ServerLoginPage({
     super.key,
     required this.onSubmit,
@@ -41,8 +42,21 @@ class _ServerLoginPageState extends State<ServerLoginPage> {
       ),
       body: ListView(
         children: [
-          Text(S.of(context)!.signInToServer(serverAddress)).padded(),
-          const UserCredentialsFormField(),
+          Text(
+            S.of(context)!.signInToServer(serverAddress) + ":",
+            style: Theme.of(context).textTheme.labelLarge,
+          ).padded(16),
+          UserCredentialsFormField(
+            onFieldsSubmitted: widget.onSubmit,
+          ),
+          Text(
+            S.of(context)!.loginRequiredPermissionsHint,
+            style: Theme.of(context).textTheme.bodySmall?.apply(
+                color: Theme.of(context)
+                    .colorScheme
+                    .onBackground
+                    .withOpacity(0.6)),
+          ).padded(16),
         ],
       ),
       bottomNavigationBar: BottomAppBar(

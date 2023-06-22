@@ -68,7 +68,6 @@ class DocumentListItem extends DocumentItem {
                     .where((e) => labels.tags.containsKey(e))
                     .map((e) => labels.tags[e]!)
                     .toList(),
-                isMultiLine: false,
                 onTagSelected: (id) => onTagSelected?.call(id),
               ),
             ),

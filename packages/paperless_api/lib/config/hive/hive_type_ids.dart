@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:paperless_api/paperless_api.dart';
+import 'package:paperless_api/src/models/query_parameters/date_range_queries/date_range_unit.dart';
 
 class PaperlessApiHiveTypeIds {
   PaperlessApiHiveTypeIds._();

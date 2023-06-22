@@ -3,6 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:paperless_api/paperless_api.dart';
+import 'package:paperless_api/src/models/query_parameters/date_range_queries/date_range_query.dart';
+import 'package:paperless_api/src/models/query_parameters/date_range_queries/date_range_query_field.dart';
 
 part 'document_filter.g.dart';
 
@@ -187,16 +189,45 @@ class DocumentFilter extends Equatable {
   }
 
   int get appliedFiltersCount => [
-        documentType != initial.documentType,
-        correspondent != initial.correspondent,
-        storagePath != initial.storagePath,
-        tags != initial.tags,
-        added != initial.added,
-        created != initial.created,
-        modified != initial.modified,
-        asnQuery != initial.asnQuery,
-        ((query.queryText ?? '') != (initial.query.queryText ?? '')),
-      ].fold(0, (previousValue, element) => previousValue += element ? 1 : 0);
+        documentType.maybeWhen(
+          unset: () => 0,
+          orElse: () => 1,
+        ),
+        correspondent.maybeWhen(
+          unset: () => 0,
+          orElse: () => 1,
+        ),
+        storagePath.maybeWhen(
+          unset: () => 0,
+          orElse: () => 1,
+        ),
+        tags.maybeWhen(
+          ids: (include, exclude) => include.length + exclude.length,
+          anyAssigned: (tagIds) => tagIds.length,
+          notAssigned: () => 1,
+          orElse: () => 0,
+        ),
+        switch (added) {
+          RelativeDateRangeQuery() => 1,
+          AbsoluteDateRangeQuery() => 1,
+          UnsetDateRangeQuery() => 0,
+        },
+        switch (created) {
+          RelativeDateRangeQuery() => 1,
+          AbsoluteDateRangeQuery() => 1,
+          UnsetDateRangeQuery() => 0,
+        },
+        switch (modified) {
+          RelativeDateRangeQuery() => 1,
+          AbsoluteDateRangeQuery() => 1,
+          UnsetDateRangeQuery() => 0,
+        },
+        asnQuery.maybeWhen(
+          unset: () => 0,
+          orElse: () => 1,
+        ),
+        (query.queryText?.isNotEmpty ?? false) ? 1 : 0,
+      ].fold(0, (previousValue, element) => previousValue + element);
 
   @override
   List<Object?> get props => [

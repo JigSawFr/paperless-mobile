@@ -856,5 +856,9 @@
   "convertSinglePageScanToPdf": "Einseitige Scans vor dem Hochladen immer in PDF umwandeln",
   "@convertSinglePageScanToPdf": {
     "description": "description of the upload scans as pdf setting"
+  },
+  "loginRequiredPermissionsHint": "Die Verwendung von Paperless Mobile erfordert seit paperless-ngx 1.14.0 und höher ein Mindestmaß an Benutzerberechtigungen. Stelle deshalb bitte sicher, dass der anzumeldende Benutzer die Berechtigung hat, andere Benutzer (User → View) und die Einstellungen (UISettings → View) einzusehen. Falls du nicht über diese Berechtigungen verfügst, wende dich bitte an einen Administrator deines paperless-ngx Servers.",
+  "@loginRequiredPermissionsHint": {
+    "description": "Hint shown on the login page informing the user of the required permissions to use the app."
   }
 }

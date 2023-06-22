@@ -4,51 +4,95 @@ import 'package:paperless_mobile/features/labels/tags/view/widgets/tag_widget.da
 
 class TagsWidget extends StatelessWidget {
   final List<Tag> tags;
-  final bool isMultiLine;
   final void Function(int tagId)? onTagSelected;
   final bool isClickable;
   final bool showShortNames;
   final bool dense;
 
   const TagsWidget({
-    Key? key,
+    super.key,
     required this.tags,
-    this.isMultiLine = true,
-    this.isClickable = true,
     this.onTagSelected,
+    this.isClickable = true,
     this.showShortNames = false,
     this.dense = true,
-  }) : super(key: key);
+  });
+
+  List<Widget> get _children {
+    return [
+      for (var tag in tags)
+        TagWidget(
+          tag: tag,
+          isClickable: isClickable,
+          onSelected: () => onTagSelected?.call(tag.id!),
+          showShortName: showShortNames,
+          dense: dense,
+        )
+    ];
+  }
+
+  const factory TagsWidget.multiLine({
+    Key? key,
+    required List<Tag> tags,
+    required void Function(int tagId)? onTagSelected,
+    required bool isClickable,
+    required bool showShortNames,
+    required bool dense,
+  }) = _MultiLineTagsWidget;
+
+  const factory TagsWidget.sliver({
+    Key? key,
+    required List<Tag> tags,
+    void Function(int tagId)? onTagSelected,
+    bool isClickable,
+    bool showShortNames,
+    bool dense,
+  }) = _SliverTagsWidget;
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) {
-        final children = tags
-            .map(
-              (tag) => TagWidget(
-                tag: tag,
-                isClickable: isClickable,
-                onSelected: () => onTagSelected?.call(tag.id!),
-                showShortName: showShortNames,
-                dense: dense,
-              ),
-            )
-            .toList();
-        if (isMultiLine) {
-          return Wrap(
-            runAlignment: WrapAlignment.start,
-            children: children,
-            runSpacing: 4,
-            spacing: 4,
-          );
-        } else {
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(children: children),
-          );
-        }
-      },
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(children: _children),
+    );
+  }
+}
+
+class _MultiLineTagsWidget extends TagsWidget {
+  const _MultiLineTagsWidget({
+    super.key,
+    required super.tags,
+    super.onTagSelected,
+    super.isClickable,
+    super.showShortNames,
+    super.dense,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      runAlignment: WrapAlignment.start,
+      children: _children,
+      runSpacing: 4,
+      spacing: 4,
+    );
+  }
+}
+
+class _SliverTagsWidget extends TagsWidget {
+  const _SliverTagsWidget({
+    super.key,
+    required super.tags,
+    super.isClickable,
+    super.showShortNames,
+    super.dense,
+    super.onTagSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList.list(
+      children: _children,
     );
   }
 }

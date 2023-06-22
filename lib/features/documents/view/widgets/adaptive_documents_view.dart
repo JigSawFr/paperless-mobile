@@ -159,7 +159,7 @@ class SliverAdaptiveDocumentsView extends AdaptiveDocumentsView {
         crossAxisCount: 2,
         mainAxisSpacing: 4,
         crossAxisSpacing: 4,
-        childAspectRatio: 1 / 2,
+        mainAxisExtent: 356,
       ),
       itemCount: documents.length,
       itemBuilder: (context, index) {

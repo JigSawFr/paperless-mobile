@@ -22,7 +22,6 @@ import 'package:paperless_mobile/features/saved_view/view/saved_view_list.dart';
 import 'package:paperless_mobile/features/tasks/cubit/task_status_cubit.dart';
 import 'package:paperless_mobile/generated/l10n/app_localizations.dart';
 import 'package:paperless_mobile/helpers/message_helpers.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 
 class DocumentFilterIntent {
   final DocumentFilter? filter;
@@ -34,7 +33,6 @@ class DocumentFilterIntent {
   });
 }
 
-//TODO: Refactor this
 class DocumentsPage extends StatefulWidget {
   const DocumentsPage({Key? key}) : super(key: key);
 
@@ -120,30 +118,60 @@ class _DocumentsPageState extends State<DocumentsPage>
                 builder: (context, state) {
                   final appliedFiltersCount = state.filter.appliedFiltersCount;
                   final show = state.selection.isEmpty;
+                  final canReset = state.filter.appliedFiltersCount > 0;
                   return AnimatedScale(
                     scale: show ? 1 : 0,
                     duration: const Duration(milliseconds: 200),
                     curve: Curves.easeIn,
-                    child: b.Badge(
-                      position: b.BadgePosition.topEnd(top: -12, end: -6),
-                      showBadge: appliedFiltersCount > 0,
-                      badgeContent: Text(
-                        '$appliedFiltersCount',
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      animationType: b.BadgeAnimationType.fade,
-                      badgeColor: Colors.red,
-                      child: _currentTab == 0
-                          ? FloatingActionButton(
-                              child: const Icon(Icons.filter_alt_outlined),
-                              onPressed: _openDocumentFilter,
-                            )
-                          : FloatingActionButton(
-                              child: const Icon(Icons.add),
-                              onPressed: () => _onCreateSavedView(state.filter),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        if (canReset)
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FloatingActionButton.small(
+                              key: UniqueKey(),
+                              backgroundColor: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
+                              onPressed: () {
+                                context.read<DocumentsCubit>().updateFilter();
+                              },
+                              child: Icon(
+                                Icons.refresh,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primaryContainer,
+                              ),
                             ),
+                          ),
+                        b.Badge(
+                          position: b.BadgePosition.topEnd(top: -12, end: -6),
+                          showBadge: appliedFiltersCount > 0,
+                          badgeContent: Text(
+                            '$appliedFiltersCount',
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          animationType: b.BadgeAnimationType.fade,
+                          badgeColor: Colors.red,
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 250),
+                            child: (_currentTab == 0)
+                                ? FloatingActionButton(
+                                    child:
+                                        const Icon(Icons.filter_alt_outlined),
+                                    onPressed: _openDocumentFilter,
+                                  )
+                                : FloatingActionButton(
+                                    child: const Icon(Icons.add),
+                                    onPressed: () =>
+                                        _onCreateSavedView(state.filter),
+                                  ),
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 },

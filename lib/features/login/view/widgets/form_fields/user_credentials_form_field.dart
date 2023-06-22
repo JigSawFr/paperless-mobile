@@ -9,8 +9,11 @@ import 'package:paperless_mobile/generated/l10n/app_localizations.dart';
 class UserCredentialsFormField extends StatefulWidget {
   static const fkCredentials = 'credentials';
 
+  final void Function() onFieldsSubmitted;
+
   const UserCredentialsFormField({
     Key? key,
+    required this.onFieldsSubmitted,
   }) : super(key: key);
 
   @override
@@ -19,6 +22,9 @@ class UserCredentialsFormField extends StatefulWidget {
 }
 
 class _UserCredentialsFormFieldState extends State<UserCredentialsFormField> {
+  final _usernameFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return FormBuilderField<LoginFormCredentials?>(
@@ -28,9 +34,13 @@ class _UserCredentialsFormFieldState extends State<UserCredentialsFormField> {
           children: [
             TextFormField(
               key: const ValueKey('login-username'),
-              textCapitalization: TextCapitalization.words,
+              focusNode: _usernameFocusNode,
+              textCapitalization: TextCapitalization.none,
+              textInputAction: TextInputAction.next,
+              onFieldSubmitted: (value) {
+                _passwordFocusNode.requestFocus();
+              },
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              // USERNAME
               autocorrect: false,
               onChanged: (username) => field.didChange(
                 field.value?.copyWith(username: username) ??
@@ -49,11 +59,15 @@ class _UserCredentialsFormFieldState extends State<UserCredentialsFormField> {
             ),
             ObscuredInputTextFormField(
               key: const ValueKey('login-password'),
+              focusNode: _passwordFocusNode,
               label: S.of(context)!.password,
               onChanged: (password) => field.didChange(
                 field.value?.copyWith(password: password) ??
                     LoginFormCredentials(password: password),
               ),
+              onFieldSubmitted: (_) {
+                widget.onFieldsSubmitted();
+              },
               validator: (value) {
                 if (value?.trim().isEmpty ?? true) {
                   return S.of(context)!.passwordMustNotBeEmpty;

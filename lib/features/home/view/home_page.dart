@@ -12,7 +12,6 @@ import 'package:paperless_mobile/core/bloc/connectivity_cubit.dart';
 import 'package:paperless_mobile/core/config/hive/hive_config.dart';
 import 'package:paperless_mobile/core/database/tables/global_settings.dart';
 import 'package:paperless_mobile/core/database/tables/local_user_account.dart';
-import 'package:paperless_mobile/core/exception/server_message_exception.dart';
 import 'package:paperless_mobile/core/global/constants.dart';
 import 'package:paperless_mobile/core/navigation/push_routes.dart';
 import 'package:paperless_mobile/core/repository/label_repository.dart';

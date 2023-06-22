@@ -1,0 +1,3 @@
+* Filters can now be reset via a new button above the filter button
+* Added hint about required user permissions on the login page
+* Minor visual updates

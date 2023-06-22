@@ -22,7 +22,7 @@
     <img src="assets/logos/paperless_logo_green.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">Paperless Mobile</h3>
+<h2 align="center">Paperless Mobile</h2>
 
   <p align="center">
     An (almost) fully fledged mobile paperless client.
@@ -42,26 +42,25 @@
 </div>
 
 ## Important Notice
-This project is under **very active** development. Breaking changes are expected and therefore a clean install is recommended for each update! The newest version (2.2.0+28, available in Open Beta on Google Play) is **not** yet compatible with Paperless-ngx 1.14.0 and later!
+This project is under **very active** development. Breaking changes are expected and therefore a clean install is recommended for each update!
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-With this app you can conveniently add, manage or simply find documents stored in your paperless server without any comproimises. This project started as a small fun side project to learn more about the Flutter framework and because existing solutions didn't fulfill my needs, but it has grown much faster with far more features than I originally anticipated.  
+Paperless Mobile brings <a href="https://github.com/paperless-ngx/paperless-ngx">paperless-ngx</a> to your smartphone without any compromises. While you can use paperless-ngx from a mobile browser, managing your documents this way is often a tedious and slow process. The app integrates a custom scanner, biometric authentication and many more conveniences to help you make the transition from a paper-based to a fully digital office experience.
 
-
-### :rocket: Features
-:heavy_check_mark: **View** your documents at a glance, in a compact list or a more detailed grid view<br>
-:heavy_check_mark: **Add**, **delete** or **edit** your documents<br>
-:heavy_check_mark: **Share**, **download** and **preview** PDF files<br>
-:heavy_check_mark: **Manage** and assign correspondents, document types, tags and storage paths<br>
-:heavy_check_mark: **Scan** and upload documents to paperless with preset correspondent, document type, tags and creation date<br>
+### :rocket: Highlights
+:heavy_check_mark: **View** your documents at a glance<br>
+:heavy_check_mark: **Add**, **delete** or **edit** documents<br>
+:heavy_check_mark: **Share**, **download** and **preview** files<br>
+:heavy_check_mark: **Manage** and assign labels<br>
+:heavy_check_mark: **Scan** and upload documents to paperless<br>
 :heavy_check_mark: **Upload existing documents** from other apps via Paperless Mobile<br>
-:heavy_check_mark: See all new documents in a dedicated **inbox**<br>
+:heavy_check_mark: Easily process and manage new documents in the dedicated **inbox**<br>
 :heavy_check_mark: **Search** for documents using a wide range of filter criteria<br>
-:heavy_check_mark: **Secure** your data with **biometric authentication** across sessions<br>
+:heavy_check_mark: **Secure** your data with a **biometric factor**<br>
 :heavy_check_mark: Support for **TLS mutual authentication** (client certificates)<br>
 :heavy_check_mark: **Modern, intuitive UI** built according to the Material Design 3 specification<br>
-:heavy_check_mark: Available in english and german language (more to come!)<br>
+:heavy_check_mark: Available in English, German, Polish, French, Catalan, Czech and Turkish language with more to come<br>
 
 
 ### Built With
@@ -70,13 +69,12 @@ With this app you can conveniently add, manage or simply find documents stored i
 
 <!-- GETTING STARTED -->
 ## Getting Started
-
 To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 * Install an IDE of your choice (e.g. VSCode with the Dart/Flutter extensions)
 * Install the flutter SDK (https://docs.flutter.dev/get-started/install) _or_ use the flutter git submodule pinned in this project by running `git submodule update --init` inside the project root directory.
-* 
+
 ### Install dependencies and generate files
 1. First, clone the repository:
 ```sh
@@ -150,16 +148,19 @@ flutter install --use-application-binary=build/pp/outputs/flutter-apk/<apk_file_
 If you want to contribute by translating a language, feel free to join the [Crowdin](https://crowdin.com/project/paperless-mobile) project!
 
 Thanks to the following contributors for providing translations:
-- German and English by <a href="https://github.com/astubenbord">astubenbord</a>
-- Czech language by <a href="https://github.com/svetlemodry">svetlemodry</a>
-- Turkish language by <a href="https://github.com/imsakg">imsakg</a>
+- German and English language translated by  <a href="https://github.com/astubenbord">astubenbord</a>
+- Czech language translated by <a href="https://github.com/svetlemodry">svetlemodry</a>
+- Turkish language translated by  <a href="https://github.com/imsakg">imsakg</a>
+- Polish language translated by <a href="https://github.com/losiu97">losiu97</a>
+- French language translated by <a href="https://github.com/JigSawFr">JigSawFr</a>, <a href="https://github.com/SpicyWasab">SpicyWasab</a> and <a href="https://github.com/nathanaelhoun">nathanaelhoun</a>
+- Catalan language translated by <a href="https://github.com/rubenix">rubenix</a>
 
 <!-- ROADMAP -->
 ## Roadmap
 - [ ] Fully custom document scanner optimized for common white A4 documents and optimized for the use with Paperless
 - [ ] Add more languages
-- [ ] Support for IOS and publish to AppStore
-- [ ] Automatic releases and CI/CD with fastlane
+- [x] Support for IOS and publish to AppStore
+- [x] Automatic releases and CI/CD with fastlane
 - [ ] Templates for recurring scans (e.g. monthly payrolls with same title, dates at end of month, fixed correspondent and document type)
 
 See the [open issues](https://github.com/astubenbord/paperless-mobile/issues) for a full list of issues and [open feature requests](https://github.com/astubenbord/paperless-mobile/discussions/categories/feature-requests) for requested features.
@@ -174,7 +175,7 @@ Don't forget to give the project a star! Thanks again!
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+3. Commit your Changes (`git commit -m 'feat: Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
@@ -183,7 +184,7 @@ Don't forget to give the project a star! Thanks again!
 Distributed under the GNU General Public License v3.0. See `LICENSE.txt` for more information.
 
 ## Donations
-I do this in my free time, so if you like the project, consider buying me a coffee! Any donation is much appreciated :)
+I do this in my free time, so if you like the project, consider buying me a coffee! Any donation is much appreciated :^)
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/astubenbord)
 
@@ -215,3 +216,5 @@ Made with [contrib.rocks](https://contrib.rocks).
 ## Troubleshooting
 #### Suggestions are not selectable in any of the label form fields
 This is a known issue and it has to do with accessibility features of Android. Password managers such as Bitwarden often caused this issue. Luckily, this can be resolved by turning off the accessibility features in these apps. This could also be observed with apps that are allowed to display over other apps, such as emulations of the dynamic island on android.
+## I cannot log in since the update to paperless-ngx 1.14.0 (and above).
+The app has to somehow get information about it's user from the paperless API. Therefore, the `Users -> View` and the `UISettings -> View` permissions are required for each user trying to log into the app. Otherwise, the app has no way of obtaining your user id and other information required for the usage of most features.
