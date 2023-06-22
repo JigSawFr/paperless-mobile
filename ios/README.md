@@ -117,6 +117,7 @@ Beta deployement: https://docs.fastlane.tools/getting-started/ios/beta-deploymen
 ```sh
 bundle install
 bundle exec fastlane [lane]
+bundle exec fastlane ios sync_match
 ```
 
 ## Contributor cheatsheet
@@ -124,6 +125,7 @@ bundle exec fastlane [lane]
 Installation of latest stable release of ruby with rbenv
 ```sh
 rbenv install $(rbenv install -l | grep -v - | tail -1)
+#rbenv install -l 2>&1 | grep '^\d' | sort -n | tail -n 1 > .ruby-version # Pick the most recent stable Ruby
 ```
 
 Fix the version of project to a new version
@@ -139,5 +141,34 @@ gem "fastlane"
 Update fastlane gem only
 ```sh
 bundle update fastlane
+```
+### Fastlane
+Initialisation of fastlane
+```sh
+bundle exec fastlane init
+```
+List all builds
+```sh
+bundle exec fastlane pilot builds
+```
+List of testers
+```sh
+bundle exec fastlane pilot list
+```
+Test if authenticated with Git/Github
+```sh
+ssh -T git@github.com
+```
+
+```sh
+bundle exec flutter build ipa --export-method development
+bundle exec flutter upgrade
+bundle exec dart fix --dry-run
+bundle exec gem install cocoapods
+bundle exec pod install
+bundle exec pod update
+bundle exec pod --version
+bundle exec flutter pub get
+bundle exec fastlane beta
 ```
 ### Work in Progress...
