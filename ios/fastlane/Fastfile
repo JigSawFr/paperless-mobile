@@ -1,0 +1,85 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+# Opt out from analytics
+opt_out_usage
+
+# Default platform
+default_platform(:ios)
+
+# For iOS platform
+platform :ios do
+  # Increment build number before running a lane
+  before_all do
+    #increment_build_number(xcodeproj: "Runner.xcodeproj")
+  end
+
+  # Sync match data
+  lane :sync_match do 
+    match(type: "appstore", readonly: true)
+    match(type: "development", readonly: true)
+  end
+
+  # Send a new TestFlight build
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+
+    # Apple Store Connect
+    api_key = app_store_connect_api_key(
+      key_id: ENV['APPLE_STORE_CONNECT_KEY_ID'],
+      issuer_id: ENV['APPLE_STORE_CONNECT_ISSUER_ID'],
+      key_filepath: ENV['APPLE_STORE_CONNECT_KEY_FILEPATH'],
+      duration: 1200, # optional (maximum 1200)
+      in_house: false # optional but may be required if using match/sigh
+    )
+
+    # Generate changelog from commits
+    changelog_from_git_commits
+
+    # Synchronization of Signing Certs
+    sync_code_signing(
+      type: "appstore", 
+      readonly: true, 
+      app_identifier: [
+        "de.astubenbord.paperless-mobile", 
+        "de.astubenbord.paperless-mobile.receive-sharing-intent"
+      ]
+    )
+    
+    # Update of Project Team
+    update_project_team(
+      path: "Runner.xcodeproj",
+      teamid: ENV['APPLE_DEVELOPER_PORTAL_TEAM_ID']
+    )
+
+    # Build of app
+    build_app(
+      workspace: "Runner.xcworkspace", 
+      scheme: "Runner", 
+      clean: true,
+      export_method: "app-store"
+    )
+
+    # Send to TestFlight
+    upload_to_testflight(api_key: api_key)
+  end
+
+  # Once a lane finished
+  after_all do |lane|
+    say("Successfully finished deployment (#{lane})!")
+  end
+
+# End of iOS platform
+end
